@@ -94,8 +94,10 @@ class FlaskTestCase(unittest.TestCase):
             tester = app.test_client(self)
             tester.post(
                                     '/login',
-                                    data=dict(username="admin", password="admin"),
-                                    follow_redirects = True)
+                                    data=dict(
+                                        username="admin",
+                                        password="admin"),
+                                        follow_redirects = True)
 
             response = tester.get('/u/not_existing_user', follow_redirects=False)
             response1 = tester.get('/user/not_existing_user', follow_redirects=False)
