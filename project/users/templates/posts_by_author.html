@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+   <h1>Hello There, Werlcome to my bloggr app!</h1>
+   <br>
+
+   <h2>Articles By {{ author.name }}:</h2>
+   {% for post in posts %}
+   <strong>Title:</strong> {{ post.title }} <br>
+   <strong>Post:</strong> {{ post.description }} <br>
+   <strong>Author:</strong> {{ post.author.name }} <br>
+   <strong>Category:</strong> {{ post.category.name }} <br>
+   <br>
+   <br>
+   {% endfor %} 
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Please login</h1>
+    <form action="{{ url_for("users.login") }}" method="post">
+        <input type="text" placeholder="Username" name="username">
+        <input type="password" placeholder="Password" name="password">
+        <input type="submit" class="btn btn-primary">
+    </form>
+    {% if error %}
+    <strong>Error: </strong><div class="alert">{{ error}} </div>
+    {% endif %}
+{% endblock %}
