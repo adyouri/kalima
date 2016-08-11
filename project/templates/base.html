@@ -6,11 +6,27 @@
     <title>Bloggr</title>
 </head>
 <body>
+
    {% for msg in get_flashed_messages() %}
    <div class="alert">{{msg}}</div>
    {% endfor %}
 
     <div class="container">
+        <h4> 
+            <a href="{{ url_for("posts.home") }}">Bloggr</a> 
+            {% if current_user.is_active() %}
+            | <a href="{{ url_for("users.posts_by_author", author=current_user.name) }}">
+                {{ current_user.name }}
+              </a> 
+            | <a href="{{ url_for("users.logout") }}">Log out</a> 
+            {% else %} 
+            | <a href="{{ url_for("users.login") }}">Log in</a> 
+            | <a href="{{ url_for("users.register") }}">Register</a>
+            {% endif %}
+           
+        
+        </h4>
+    <hr>
     {% block content %}
 
     {% endblock %} 

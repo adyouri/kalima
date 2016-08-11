@@ -2,12 +2,13 @@ from flask import flash, redirect, session, url_for, render_template, abort
 
 from project.models import BlogPost, User, Category
 
+from  flask_login import current_user
 
 
 
 
 from . import posts_blueprint
-from project.decorators import login_required
+from flask_login import login_required
 @posts_blueprint.route("/posts/<id>")
 def post_by_id(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
@@ -17,7 +18,8 @@ def post_by_id(id):
 @login_required
 def home():
     posts = BlogPost.query.all()
-    return render_template("index.html", posts=posts)
+    user = current_user # Test if user is in the page
+    return render_template("index.html", posts=posts, user=user)
 
 
 @posts_blueprint.route('/cat/<category>')

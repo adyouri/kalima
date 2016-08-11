@@ -1,10 +1,9 @@
 from . import users_blueprint
-from project.decorators import login_required
-from flask import flash, redirect, session, url_for, render_template, abort, request
+from flask import flash, redirect, url_for, render_template, abort, request
 from project.models import User, BlogPost
-from forms import LoginForm
-
-
+from forms import LoginForm, RegisterForm
+from project import bcrypt, LoginManager, db
+from flask_login import login_user, logout_user, login_required
 
 
 
@@ -15,11 +14,14 @@ from forms import LoginForm
 @login_required
 def posts_by_author(author):
     author = User.query.filter_by(name = author).first()
+    message = ""
     if author:
         posts = BlogPost.query.filter_by(author_id = author.id)
+        if not posts.first():
+            message = "No Articles Yet."
     else:
         abort(404)
-    return render_template("posts_by_author.html", posts=posts, author = author)
+    return render_template("posts_by_author.html", posts=posts, author = author, message = message)
 
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
@@ -28,12 +30,13 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
-            if form.username.data != "admin" or form.password.data != "admin":
-                error = "Invalid!"
+            user = User.query.filter_by(name=form.username.data).first()
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                    login_user(user)
+                    flash('You were logged in')
+                    return redirect(url_for('posts.home'))
             else:
-                session['logged_in'] = True
-                flash('You were logged in')
-                return redirect(url_for('posts.home'))
+                    error = "Invalid!"
         else:
             return render_template('login.html', form = form, error=error)
     return render_template('login.html', form=form, error=error)
@@ -41,6 +44,29 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    session.pop('logged_in')
-    flash('Logged out successfully !')
+    logout_user()
     return redirect(url_for('posts.home'))
+
+
+@users_blueprint.route('/register', methods=["GET", "POST"])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(
+                name = form.username.data,
+                email = form.email.data,
+                password = form.password.data
+                )
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        flash("You were logged in")
+        return redirect(url_for('posts.home'))
+    return render_template("register.html", form = form) 
+
+
+
+
+
+
+

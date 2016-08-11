@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Please login</h1>
-    <form class="form-signin" action="" role="form" method="post">
+<h1>Register: </h1>
+    <form class="form-signup" action="" role="form" method="post">
         {{ form.csrf_token }}
         <p>
             {{ form.username(placeholder="username", class="form-control") }}
@@ -13,7 +13,21 @@
                 {% endif %}
             </span>
         </p>
+
         <p>
+            {{ form.email(placeholder="email", class="form-control") }}
+            <span class="error">
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </span>
+        </p>
+
+
+        <p>
+
             {{ form.password(placeholder="password", class="form-control") }}
             <span class="error">
                 {% if form.password.errors %}
@@ -23,7 +37,20 @@
                 {% endif %}
             </span>
         </p>
-        <button class="btn btn-sm btn-success" type="submit">Sign in</button>
+
+
+        <p>
+            {{ form.confirm(placeholder="password confirmation", class="form-control") }}
+            <span class="error">
+                {% if form.confirm.errors %}
+                    {% for error in form.confirm.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </span>
+        </p>
+
+        <button class="btn btn-sm btn-success" type="submit">Sign Up</button>
     </form>
     {% if error %}
     <strong>Error: </strong><div class="alert">{{ error}} </div>
