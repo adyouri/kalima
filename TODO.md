@@ -7,8 +7,7 @@
 # Add Categories To nav bar and use bootstrap navbar
 
 # Testing:
-    # Add new post
-    # Add new category
-    # current user is in the nav bar
-    # linking to the category
-    # linking to the user page
+    # Display individual post on "/posts/id"
+    ----------------------------------------
+    # Add comments correctly
+    # Add comments incorrectly
