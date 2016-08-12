@@ -1,0 +1,20 @@
+{% from "_formhelpers.html" import render_field %}
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Please login</h1>
+    <form class="form-signin" action="" role="form" method="post">
+        {{ form.csrf_token }}
+
+        {{ render_field(field=form.title, placeholder="title", class="form-control") }}
+
+        {{ render_field(field=form.description, placeholder="Discription", class="form-control") }}
+
+        {{ render_field(field=form.category, placeholder="Category", class="form-control") }}
+
+        <button class="btn btn-sm btn-success" type="submit">Sign in</button>
+    </form>
+    {% if error %}
+    <strong>Error: </strong><div class="alert">{{ error}} </div>
+    {% endif %}
+{% endblock %}
