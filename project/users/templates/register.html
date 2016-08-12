@@ -1,54 +1,19 @@
+{% from "_formhelpers.html" import render_field %}
+
+
 {% extends "base.html" %}
 {% block content %}
 <h1>Register: </h1>
     <form class="form-signup" action="" role="form" method="post">
         {{ form.csrf_token }}
-        <p>
-            {{ form.username(placeholder="username", class="form-control") }}
-            <span class="error">
-                {% if form.username.errors %}
-                    {% for error in form.username.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
-        </p>
 
-        <p>
-            {{ form.email(placeholder="email", class="form-control") }}
-            <span class="error">
-                {% if form.email.errors %}
-                    {% for error in form.email.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
-        </p>
+        {{ render_field(field=form.username, placeholder="username", class="form-control") }}
 
+        {{ render_field(field=form.email, placeholder="email", class="form-control") }}
 
-        <p>
+        {{ render_field(field=form.password, placeholder="password", class="form-control") }}
 
-            {{ form.password(placeholder="password", class="form-control") }}
-            <span class="error">
-                {% if form.password.errors %}
-                    {% for error in form.password.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
-        </p>
-
-
-        <p>
-            {{ form.confirm(placeholder="password confirmation", class="form-control") }}
-            <span class="error">
-                {% if form.confirm.errors %}
-                    {% for error in form.confirm.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
-        </p>
+        {{ render_field(field=form.confirm, placeholder="password confirmation", class="form-control") }}
 
         <button class="btn btn-sm btn-success" type="submit">Sign Up</button>
     </form>

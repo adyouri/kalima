@@ -25,3 +25,6 @@ login_manager.login_view = "users.login"
 def load_user(user_id):
     return User.query.filter_by(id = int(user_id)).first()
 
+@app.template_filter()
+def slugify(string):
+    return string.lower().replace(" ", "-")
