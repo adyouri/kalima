@@ -1,6 +1,6 @@
 from flask import flash, redirect, session, url_for, render_template, abort, request
 
-from project.models import BlogPost, User, Category
+from project.models import BlogPost, User, Category, Comment
 
 from  flask_login import current_user, login_required
 
@@ -11,7 +11,10 @@ from project import db
 @posts_blueprint.route("/posts/<id>")
 def post_by_id(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
-    return render_template("post.html", post = post)
+    comments = Comment.query.filter_by(post_id = post.id)
+    return render_template("post.html", post = post, comments = comments)
+
+
 
 @posts_blueprint.route('/')
 @login_required

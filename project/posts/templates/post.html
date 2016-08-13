@@ -1,12 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
    <br>
-   <h2>Articles:</h2>
-   <strong>Title:</strong> {{ post.title }} <br>
+   <h2>{{ post.title }}</h2>
    <strong>Post:</strong> {{ post.description }} <br>
    <strong>Author:</strong> {{ post.author.name }} <br>
    <strong>Category:</strong> {{ post.category.name }} <br>
    <br>
    <br>
-  
+   <hr>
+   <h3>Add comment:</h3>
+
+   <hr>
+   {% if not comments.first()  %} {# if post has no comments #}
+   <i style = "color: #999"> No comments yet</i>
+   {% else %}
+   <h2>Comments({{ post.comments | count }}): </h2>
+   {% for comment in comments %}
+   <div class="comments">
+       <i>#{{ comment.id }} | {{ comment.author.name }}:</i> 
+       <p>{{ comment.content }}</p>
+   </div>
+   {% endfor %}
+   {% endif %}
 {% endblock %} 
