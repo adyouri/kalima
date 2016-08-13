@@ -29,6 +29,16 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, ForeignKey('posts.id'))
     author_id = db.Column(db.Integer, ForeignKey('users.id'))
 
+    def __init__(self, content, post_id, author_id):
+        self.content = content
+        self.post_id = post_id
+        self.author_id = author_id
+
+    def __repr__(self):
+        return '<Comment {} >'.format(self.content)
+
+
+
 
 class Category(db.Model):
     __tablename__ = "categories"

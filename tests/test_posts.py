@@ -1,6 +1,7 @@
 import unittest
 from flask_login import current_user
 from base import BaseTestCase
+from project.models import Comment, BlogPost, Category
 
 
 
@@ -19,6 +20,8 @@ class PostsTestCase(BaseTestCase):
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
             response = self.client.get('/', follow_redirects=True)
+            post = BlogPost.query.filter_by(id=2).first()
+            self.assertTrue(str(post) == "<title From Abd | This is just a test post From Abd >")
             self.assertIn(b'This is just a test post From Abd', response.data)
 
         def test_individual_post(self):
@@ -33,12 +36,37 @@ class PostsTestCase(BaseTestCase):
             self.assertIn(b'This is just a test post From Abd', response2.data)
             self.assertIn(b'abd', response2.data)
 
+
+        def test_post_has_comments(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response = self.client.get('/posts/1', follow_redirects=True)
+            comment = Comment.query.filter_by(id=1).first()
+            self.assertTrue(str(comment) == "<Comment Test comment >")
+            self.assertIn(b'admin', response.data)
+            self.assertIn(b'Test comment', response.data)
+            self.assertIn(b'abd', response.data)
+
+        def test_post_has_no_comments(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response = self.client.get('/posts/2', follow_redirects=True)
+            self.assertIn(b'No comments yet', response.data)
+
+
+
         def test_post_in_category(self):
             self.client.post(
                                     '/login',
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
             response = self.client.get('/cat/testing', follow_redirects=True)
+            category = Category.query.filter_by(id=1).first()
+            self.assertTrue(str(category) == "<name testing >")
             self.assertIn(b'This is just a test post', response.data)
 
         def test_page_not_found(self):
