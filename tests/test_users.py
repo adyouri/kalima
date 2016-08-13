@@ -1,6 +1,8 @@
 import unittest
 from flask_login import current_user
 from base import BaseTestCase
+from project import bcrypt
+from project.models import User
 
 
 class UsersTestCase(BaseTestCase):
@@ -37,6 +39,9 @@ class UsersTestCase(BaseTestCase):
                                         data=dict(username="admin", password="admin"),
                                         follow_redirects = True)
                 self.assertIn(b'You were logged in', response.data)
+                self.assertTrue(current_user.name == "admin")
+                user = User.query.filter_by(name="admin").first()
+                self.assertTrue(str(user) == "<name admin >")
                 self.assertTrue(current_user.name == "admin")
                 self.assertTrue(current_user.is_active())
 
@@ -92,6 +97,11 @@ class UsersTestCase(BaseTestCase):
                 self.assertIn(b'Field must be between 6 and 25 characters long.', response.data)
                 self.assertIn(b'Passwords must match', response.data)
                 self.assertIn(b'This field is required.', response.data)
+        def test_check_password(self):
+            user = User.query.filter_by(name="admin").first()
+            self.assertTrue(bcrypt.check_password_hash(user.password, "admin"))
+            self.assertFalse(bcrypt.check_password_hash(user.password, "incorrect"))
+
 
 
 

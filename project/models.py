@@ -12,6 +12,7 @@ class BlogPost(db.Model):
     description = db.Column(db.String, nullable=False)
     author_id = db.Column(db.Integer, ForeignKey('users.id'))
     category_id = db.Column(db.Integer, ForeignKey('categories.id'))
+    comments = relationship("Comment", backref="post") # post.comments
     def __init__(self, title, description, author_id, category_id):
         self.title = title
         self.description = description
@@ -20,6 +21,28 @@ class BlogPost(db.Model):
 
     def __repr__(self):
         return '<title {} | {} >'.format(self.title, self.description)
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String, nullable=False)
+    post_id = db.Column(db.Integer, ForeignKey('posts.id'))
+    author_id = db.Column(db.Integer, ForeignKey('users.id'))
+
+
+class Category(db.Model):
+    __tablename__ = "categories"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    posts = relationship("BlogPost", backref="category")
+
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<name {} >'.format(self.name)
+
 
 
 
@@ -30,6 +53,7 @@ class User(db.Model):
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     posts = relationship("BlogPost", backref="author")
+    comments = relationship("Comment", backref="author") # comment.author.(id, name, email...)
 
 
     def __init__(self, name, email, password):
@@ -53,22 +77,6 @@ class User(db.Model):
         return '<name {} >'.format(self.name)
 
 
-
-
-
-
-class Category(db.Model):
-    __tablename__ = "categories"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    posts = relationship("BlogPost", backref="category")
-
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return '<name {} >'.format(self.name)
 
 
 
