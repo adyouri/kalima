@@ -107,6 +107,40 @@ class PostsTestCase(BaseTestCase):
                 self.assertTrue(current_user.name == "admin")
                 self.assertTrue(current_user.is_active())
 
+        def test_correct_add_comment_to_post(self):
+
+            with self.client:
+                self.client.post(
+                        '/login',
+                        data=dict(username="admin", password="admin"),
+                        follow_redirects = True)
+                response = self.client.post(
+                                        '/posts/1',
+                                        data=dict(content="test comment",
+                                            ),
+                                        follow_redirects = True)
+                self.assertIn(b'Added new comment successfully!', response.data)
+                self.assertIn(b'test comment', response.data)
+                self.assertIn(b'admin', response.data)
+                self.assertTrue(current_user.name == "admin")
+                self.assertTrue(current_user.is_active())
+
+        def test_incorrect_add_comment_to_post(self):
+
+            with self.client:
+                self.client.post(
+                        '/login',
+                        data=dict(username="admin", password="admin"),
+                        follow_redirects = True)
+                response = self.client.post(
+                                        '/posts/2',
+                                        data=dict(content="",
+                                            ),
+                                        follow_redirects = True)
+                self.assertIn(b'field is required', response.data)
+
+
+
         def test_add_category(self):
 
             with self.client:

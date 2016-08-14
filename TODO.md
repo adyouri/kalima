@@ -1,14 +1,10 @@
-
-# Test Comments Form
+# Add Categories To nav bar and use bootstrap navbar / check Zeal bootstrap docs
 
 # {Post title - author - category - comments count} in posts_base.html (DRY)
-
-# Add Categories To nav bar and use bootstrap navbar
 
 # Tags
 
 # Comments Threads
 
 # Testing:
-    # Add comments correctly
-    # Add comments incorrectly
+    # Test Categories in every nav bar page

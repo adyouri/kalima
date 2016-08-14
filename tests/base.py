@@ -15,6 +15,7 @@ class BaseTestCase(TestCase):
         db.create_all()
         db.session.add(User("admin", "admin@g.co", "admin"))
         db.session.add(User("abd", "abd@g.co", "abd"))
+        db.session.add(User("tester", "tester@g.co", "tester"))
         db.session.add(Category("testing"))
         db.session.add(BlogPost("Testing Post", "This is just a test post", 1, 1))
         db.session.add(BlogPost("From Abd", "This is just a test post From Abd", 2, 1))
