@@ -5,15 +5,19 @@ from project.models import BlogPost, User, Category, Comment
 from  flask_login import current_user, login_required
 
 from . import posts_blueprint
-from forms import PostForm
+from forms import PostForm, CommentForm
 from project import db
 
-@posts_blueprint.route("/posts/<id>")
+@posts_blueprint.route("/posts/<id>", methods=["GET", "POST"])
 def post_by_id(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
     comments = Comment.query.filter_by(post_id = post.id)
-    return render_template("post.html", post = post, comments = comments)
-
+    form = CommentForm()
+    if form.validate_on_submit():
+        db.session.add(Comment(form.content.data, post.id, current_user.id))
+        db.session.commit()
+        flash("Added new comment successfully!")
+    return render_template("post.html", post = post, comments = comments, form = form)
 
 
 @posts_blueprint.route('/')

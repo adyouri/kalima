@@ -1,3 +1,6 @@
+{% from "_formhelpers.html" import render_field %}
+
+
 {% extends "base.html" %}
 {% block content %}
    <br>
@@ -9,6 +12,17 @@
    <br>
    <hr>
    <h3>Add comment:</h3>
+
+    <form class="form-signin" action="" role="form" method="post">
+        {{ form.csrf_token }}
+
+        {{ render_field(field=form.content, placeholder="Content", class="form-control") }}
+
+        <button class="btn btn-sm btn-success" type="submit">Add comment</button>
+    </form>
+    {% if error %}
+    <strong>Error: </strong><div class="alert">{{ error}} </div>
+    {% endif %}
 
    <hr>
    {% if not comments.first()  %} {# if post has no comments #}
