@@ -6,14 +6,7 @@
 
    <h2>Articles In {{ category.name }}:</h2>
    {% for post in posts %}
-   <strong>Title:</strong> {{ post.title }} <br>
-   <strong>Post:</strong> {{ post.description }} <br>
-   <strong>Author:</strong> {{ post.author.name }} <br>
-   <strong>Category:</strong> 
-   <a href="{{ url_for("posts.posts_by_category", 
-               category=post.category.name)
-            }}">
-       {{ post.category.name }} </a> 
+   {% include "post_base.html" %}
    <br>
    <br>
    <br>

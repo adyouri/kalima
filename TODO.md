@@ -1,6 +1,6 @@
-# Add Categories To nav bar and use bootstrap navbar / check Zeal bootstrap docs
+# Fix broking tests
 
-# {Post title - author - category - comments count} in posts_base.html (DRY)
+# Add Categories To nav bar and use bootstrap navbar / check Zeal bootstrap docs
 
 # Tags
 
@@ -8,3 +8,4 @@
 
 # Testing:
     # Test Categories in every nav bar page
+# Add image to post

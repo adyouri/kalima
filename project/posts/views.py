@@ -9,6 +9,7 @@ from forms import PostForm, CommentForm
 from project import db
 
 @posts_blueprint.route("/posts/<id>", methods=["GET", "POST"])
+@login_required
 def post_by_id(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
     comments = Comment.query.filter_by(post_id = post.id)

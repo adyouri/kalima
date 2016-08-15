@@ -3,13 +3,12 @@
 
 {% extends "base.html" %}
 {% block content %}
-   <br>
-   <h2>{{ post.title }}</h2>
-   <strong>Post:</strong> {{ post.description }} <br>
-   <strong>Author:</strong> {{ post.author.name }} <br>
-   <strong>Category:</strong> {{ post.category.name }} <br>
-   <br>
-   <br>
+   {% include "post_base.html" %}
+   <div class="post-content">
+       <strong>Post:</strong> {{ post.description }} <br>
+       <br>
+       <br>
+   </div>
    <hr>
    <h3>Add comment:</h3>
 
@@ -29,11 +28,20 @@
    <i style = "color: #999"> No comments yet</i>
    {% else %}
    <h2>Comments({{ post.comments | count }}): </h2>
-   {% for comment in comments %}
    <div class="comments">
-       <i>#{{ comment.id }} | {{ comment.author.name }}:</i> 
-       <p>{{ comment.content }}</p>
+       {% for comment in comments %}
+       <div class="comment">
+           <i>#{{ comment.id }}</i> 
+            <span class="author"> 
+            <a href="{{ url_for("users.posts_by_author", 
+                       author=post.author.name)}}">
+               {{ comment.author.name }} 
+            </a>
+            </span> 
+               
+           <p class="comment-body">{{ comment.content }}</p>
+       </div>
+       {% endfor %}
    </div>
-   {% endfor %}
    {% endif %}
 {% endblock %} 

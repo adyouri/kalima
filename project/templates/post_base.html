@@ -1,0 +1,28 @@
+{% block post_base %}
+
+<div class="post-base">
+
+<h2 class="post-title"><a href="{{ url_for("posts.post_by_id", id = post.id) }}">{{ post.title }}</h2></a>
+
+    In <span class="cat-{{ post.category.name }}"> 
+         
+       <a href="{{ url_for("posts.posts_by_category", 
+               category=post.category.name)
+            }}">
+       {{ post.category.name }} </a> 
+    </span>
+
+    By <span class="author"> 
+     
+    <a href="{{ url_for("users.posts_by_author", 
+               author=post.author.name)
+            }}">
+       {{ post.author.name }} </a> 
+    </span>
+
+<span class="cooments-count"> ({{ post.comments | count }})</span>
+<hr>
+
+<br>
+</div>
+{% endblock %}
