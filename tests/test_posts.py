@@ -22,7 +22,7 @@ class PostsTestCase(BaseTestCase):
             response = self.client.get('/', follow_redirects=True)
             post = BlogPost.query.filter_by(id=2).first()
             self.assertTrue(str(post) == "<title From Abd | This is just a test post From Abd >")
-            self.assertIn(b'This is just a test post From Abd', response.data)
+            self.assertIn(b'From Abd', response.data)
 
         def test_individual_post(self):
             self.client.post(
@@ -67,7 +67,7 @@ class PostsTestCase(BaseTestCase):
             response = self.client.get('/cat/testing', follow_redirects=True)
             category = Category.query.filter_by(id=1).first()
             self.assertTrue(str(category) == "<name testing >")
-            self.assertIn(b'This is just a test post', response.data)
+            self.assertIn(b'Testing Post', response.data)
 
         def test_page_not_found(self):
             self.client.post(
@@ -101,7 +101,7 @@ class PostsTestCase(BaseTestCase):
                                             category="testing",
                                             ),
                                         follow_redirects = True)
-                self.assertIn(b'This is a descriptio of the post', response.data)
+                self.assertIn(b'hello', response.data)
                 self.assertIn(b'/cat/testing', response.data)
                 self.assertIn(b'admin', response.data)
                 self.assertTrue(current_user.name == "admin")
@@ -155,7 +155,7 @@ class PostsTestCase(BaseTestCase):
                                             category="new_category",
                                             ),
                                         follow_redirects = True)
-                self.assertIn(b'post with new category', response.data)
+                self.assertIn(b'hello', response.data)
                 self.assertIn(b'/cat/new_category', response.data)
                 self.assertIn(b'abd', response.data)
                 self.assertTrue(current_user.name == "abd")

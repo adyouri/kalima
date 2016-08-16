@@ -30,8 +30,7 @@ class UsersTestCase(BaseTestCase):
             response2 = self.client.get('/user/admin', follow_redirects=True)
             response3 = self.client.get('/user/tester', follow_redirects=True)
             self.assertIn(b'From Abd', response.data)
-            self.assertIn(b'test post', response1.data)
-            self.assertIn(b'just a test', response2.data)
+            self.assertIn(b'Testing Post', response2.data)
             self.assertIn(b'No Articles Yet.', response3.data)
 
         def test_correct_login(self):
