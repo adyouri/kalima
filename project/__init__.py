@@ -16,7 +16,7 @@ from users import users_blueprint
 app.register_blueprint(posts_blueprint)
 app.register_blueprint(users_blueprint)
 
-from models import User
+from models import User, Category
 
 login_manager.login_view = "users.login"
 
@@ -28,3 +28,10 @@ def load_user(user_id):
 @app.template_filter()
 def slugify(string):
     return string.lower().replace(" ", "-")
+
+
+
+@app.context_processor
+def categories():
+    categories = Category.query.all()
+    return dict(categories=categories)

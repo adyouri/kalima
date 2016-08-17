@@ -1,6 +1,8 @@
-# Fix broking tests
+# Fix Dropdown menu
 
 # Add Categories To nav bar and use bootstrap navbar / check Zeal bootstrap docs
+
+# Add Latest comments to pages
 
 # Tags
 

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for("static", filename="css/bootstrap.min.css") }}">
+    <script src="{{ url_for("static", filename="bootstrap/js/bootstrap.min.js") }}"></script>
+    <link rel="stylesheet" href="{{ url_for("static", filename="bootstrap/css/bootstrap.min.css") }}">
     <link rel="stylesheet" href="{{ url_for("static", filename="css/style.css") }}">
     <title>Bloggr</title>
 </head>
@@ -11,24 +12,62 @@
    {% for msg in get_flashed_messages() %}
    <div class="alert">{{msg}}</div>
    {% endfor %}
-
     <div class="container">
-        <h4> 
-            <a href="{{ url_for("posts.home") }}">Bloggr</a> 
+      <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for("posts.home") }}">Bloggr</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li >
+              <a href="{{ url_for("posts.home") }}">Home</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                {% for category in categories %}
+                             <li><a class="nav-link"
+                                href="{{ url_for("posts.posts_by_category", category = category.name) }}">
+                                 {{category.name}}
+                             </a><li> 
+                {% endfor %}
+                </ul>
+            </li>
+          </ul>
+            <ul class="nav navbar-nav navbar-right">
             {% if current_user.is_active() %}
-            | <a href="{{ url_for("users.posts_by_author", author=current_user.name) }}">
-                {{ current_user.name }}
-              </a> 
-            | <a href="{{ url_for("posts.add_post") }}">Add New Post</a> 
-            | <a href="{{ url_for("users.logout") }}">Log out</a> 
-            {% else %} 
-            | <a href="{{ url_for("users.login") }}">Log in</a> 
-            | <a href="{{ url_for("users.register") }}">Register</a>
-            {% endif %}
-           
-        
-        </h4>
-    <hr>
+                 <li class="active"><a href="{{ url_for("users.posts_by_author", author=current_user.name) }}">
+                    {{ current_user.name }}
+                  </a></li>
+                <li>
+                       <a href="{{ url_for("posts.add_post") }}">Add New Post</a> 
+                </li>
+                 <li>
+                       <a href="{{ url_for("users.logout") }}">Log out</a>
+                 </li>
+                {% else %} 
+                 <li>
+                       <a href="{{ url_for("users.login") }}">Log in</a>
+                 </li>
+                 <li>
+                       <a href="{{ url_for("users.register") }}">Register</a>
+                 </li>
+                {% endif %}
+                 </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+   <hr>
     {% block content %}
 
     {% endblock %} 
