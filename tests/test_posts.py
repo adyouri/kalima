@@ -1,4 +1,5 @@
 import unittest
+import datetime
 from flask_login import current_user
 from base import BaseTestCase
 from project.models import Comment, BlogPost, Category
@@ -106,6 +107,29 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'admin', response.data)
                 self.assertTrue(current_user.name == "admin")
                 self.assertTrue(current_user.is_active())
+
+        def test_post_date(self):
+
+            with self.client:
+                self.client.post(
+                        '/login',
+                        data=dict(username="admin", password="admin"),
+                        follow_redirects = True)
+                response = self.client.post(
+                                        '/add_post',
+                                        data=dict(title="hello date",
+                                            description="Description For Date Post",
+                                            category="testing",
+                                            ),
+                                        follow_redirects = True)
+                self.assertIn(b'hello', response.data)
+                self.assertIn(b'/cat/testing', response.data)
+                self.assertIn(b'admin', response.data)
+                self.assertIn(str(datetime.datetime.utcnow().date()), response.data)
+                self.assertIn(b'seconds ago', response.data)
+                self.assertTrue(current_user.name == "admin")
+                self.assertTrue(current_user.is_active())
+
 
         def test_correct_add_comment_to_post(self):
 
