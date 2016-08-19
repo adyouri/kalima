@@ -126,7 +126,7 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'/cat/testing', response.data)
                 self.assertIn(b'admin', response.data)
                 self.assertIn(str(datetime.datetime.utcnow().date()), response.data)
-                self.assertIn(b'seconds ago', response.data)
+                self.assertIn(b'just now', response.data)
                 self.assertTrue(current_user.name == "admin")
                 self.assertTrue(current_user.is_active())
 

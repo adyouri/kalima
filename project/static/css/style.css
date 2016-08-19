@@ -1,23 +1,23 @@
+.post-textarea{
+    height: 300px !important;
+    font-size: 16px;
+
+
+
+
+}
 .post-base {
     margin-bottom: 1px;
 }
 .post-content {
     margin-top: 30px;
 }
-.author {
-    margin: 2px;
-    color: #ffffff;
-    border-radius: 2px;
-    padding:3px;
-    background-color: #DD4B39;
-    font-size: 12px;
-}
 
-.author a {
+.label a {
     color: #ffffff;
 }
 
-.author a:hover {
+.label a:hover {
     color: #ffffff;
     text-decoration: none;
 }
@@ -29,52 +29,14 @@
     background-color: #FAFAFA;
     font-size: 16px;
 }
+
 .comment-body {
     margin: 10px;
-}
-
-[class^="cat-"] a {
-    color: #ffffff;
-}
-
-[class^="cat-"] a:hover {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.cat-freelancing {
-    margin: 2px;
-    color: #ffffff;
-    border-radius: 2px;
-    padding:3px;
-    background-color: #4788EF;
-    font-size: 12px;
-}
-
-.cat-programming {
-    margin: 2px;
-    color: #ffffff;
-    border-radius: 2px;
-    padding:3px;
-    background-color: #E46933;
-    font-size: 12px;
-}
-
-.cat-writing {
-    margin: 2px;
-    color: #ffffff;
-    border-radius: 2px;
-    padding:3px;
-    background-color:#FECA5C;
-    font-size: 12px;
 }
 
 .post-title {
     font-size: 24px;
 }
-
-
-
 
 .navbar-btn {
     margin-right: 20px;

@@ -3,8 +3,14 @@
 <div class="post-base">
 
 <h2 class="post-title"><a href="{{ url_for("posts.post_by_id", id = post.id) }}">{{ post.title }}</h2></a>
-    <span title="{{ post.created_date.date() }}">{{ post.created_date | timesince }} </span>
-    In <span class="cat-{{ post.category.name }}"> 
+
+    {% if post.created_date %}
+    <span title="{{ post.created_date.date() }}">
+     {{ post.created_date | timesince }} 
+    </span>
+    {% endif %}
+
+    In <span class="label label-info"> 
          
        <a href="{{ url_for("posts.posts_by_category", 
                category=post.category.name)
@@ -12,7 +18,7 @@
        {{ post.category.name }} </a> 
     </span>
 
-    By <span class="author"> 
+    By <span class="label label-primary"> 
      
     <a href="{{ url_for("users.posts_by_author", 
                author=post.author.name)

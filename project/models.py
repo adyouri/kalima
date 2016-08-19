@@ -16,15 +16,14 @@ class BlogPost(db.Model):
     author_id = db.Column(db.Integer, ForeignKey('users.id'))
     category_id = db.Column(db.Integer, ForeignKey('categories.id'))
     comments = relationship("Comment", backref="post") # post.comments
-    created_date = db.Column(db.DateTime, default = datetime.utcnow())
+    created_date = db.Column(db.DateTime)
 
-
-
-    def __init__(self, title, description, author_id, category_id):
+    def __init__(self, title, description, author_id, category_id, created_date = None):
         self.title = title
         self.description = description
         self.author_id = author_id
         self.category_id = category_id
+        self.created_date = datetime.utcnow()
 
     def __repr__(self):
         return '<title {} | {} >'.format(self.title, self.description)

@@ -32,7 +32,11 @@
        {% for comment in comments %}
        <div class="comment">
            <i>#{{ comment.id }}</i> 
-            <span class="author"> 
+            {% if comment.author.name == post.author.name %}
+            <span class="label label-danger"> 
+            {% else %}
+            <span class="label label-default"> 
+            {% endif %}
             <a href="{{ url_for("users.posts_by_author", 
                        author=post.author.name)}}">
                {{ comment.author.name }} 
