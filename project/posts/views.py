@@ -33,11 +33,17 @@ def home():
 @login_required
 def posts_by_category(category):
     category = Category.query.filter_by(name = category).first()
+    message = ""
     if category:
         posts = BlogPost.query.filter_by(category_id = category.id)
+        if not posts.first():
+            message = "No Articles Yet."
     else:
         abort(404)
-    return render_template("posts_by_category.html", posts = posts, category = category)
+    return render_template("posts_by_category.html",
+                            posts = posts,
+                            category = category,
+                            message = message)
 
 
 
