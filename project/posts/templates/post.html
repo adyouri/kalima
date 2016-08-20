@@ -32,13 +32,20 @@
        {% for comment in comments %}
        <div class="comment">
            <i>#{{ comment.id }}</i> 
+
+            {% if comment.created_date %}
+            said <span title="{{ comment.created_date.date() }}">
+             {{ comment.created_date | timesince }} 
+            </span>
+            {% endif %}
+
             {% if comment.author.name == post.author.name %}
             <span class="label label-danger"> 
             {% else %}
             <span class="label label-default"> 
             {% endif %}
             <a href="{{ url_for("users.posts_by_author", 
-                       author=post.author.name)}}">
+                       author=comment.author.name)}}">
                {{ comment.author.name }} 
             </a>
             </span> 

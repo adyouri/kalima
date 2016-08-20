@@ -1,13 +1,13 @@
+# Testing:
+    # Test Comments created date
 # Add creation date to comments
-
-# Add Categories To nav bar and use bootstrap navbar / check Zeal bootstrap docs
 
 # Add Latest comments to pages
 
 # Tags
 
+# Add slugs to posts (bloggr.com/id-post-title-here)
+
 # Comments Threads
 
-# Testing:
-    # Test Categories in every nav bar page
 # Add image to post

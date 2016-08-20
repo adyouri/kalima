@@ -34,11 +34,13 @@ class Comment(db.Model):
     content = db.Column(db.String, nullable=False)
     post_id = db.Column(db.Integer, ForeignKey('posts.id'))
     author_id = db.Column(db.Integer, ForeignKey('users.id'))
+    created_date = db.Column(db.DateTime)
 
-    def __init__(self, content, post_id, author_id):
+    def __init__(self, content, post_id, author_id, created_date = None):
         self.content = content
         self.post_id = post_id
         self.author_id = author_id
+        self.created_date = datetime.utcnow()
 
     def __repr__(self):
         return '<Comment {} >'.format(self.content)

@@ -8,7 +8,7 @@ from . import posts_blueprint
 from forms import PostForm, CommentForm
 from project import db
 
-@posts_blueprint.route("/posts/<id>", methods=["GET", "POST"])
+@posts_blueprint.route("/posts/<int:id>", methods=["GET", "POST"])
 @login_required
 def post_by_id(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
@@ -25,7 +25,7 @@ def post_by_id(id):
 @login_required
 def home():
     posts = BlogPost.query.all()
-    user = current_user # Test if user is in the page
+    user = current_user 
     return render_template("index.html", posts=posts, user=user)
 
 
