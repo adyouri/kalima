@@ -50,6 +50,21 @@ class PostsTestCase(BaseTestCase):
             self.assertIn(b'Test comment', response.data)
             self.assertIn(b'abd', response.data)
 
+        def test_comment_has_created_date(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            self.client.post(
+                                    '/posts/1',
+                                    data=dict(content="another comment here"),
+                                    follow_redirects = True)
+
+            response = self.client.get('/posts/1', follow_redirects=True)
+            self.assertIn(b'just now', response.data) 
+            self.assertIn(b'another comment here', response.data) 
+
+
         def test_post_has_no_comments(self):
             self.client.post(
                                     '/login',
@@ -57,8 +72,6 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
             response = self.client.get('/posts/2', follow_redirects=True)
             self.assertIn(b'No comments yet', response.data)
-
-
 
         def test_post_in_category(self):
             self.client.post(
