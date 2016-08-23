@@ -17,7 +17,7 @@ from users import users_blueprint
 app.register_blueprint(posts_blueprint)
 app.register_blueprint(users_blueprint)
 
-from models import User, Category
+from models import User, Category, Comment, BlogPost
 
 login_manager.login_view = "users.login"
 
@@ -25,15 +25,33 @@ login_manager.login_view = "users.login"
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(id = int(user_id)).first()
-
 @app.template_filter()
 def slugify(string):
     return string.lower().replace(" ", "-")
 
+
+def latest_comments():
+    comments_list = []
+    comments = Comment.query.order_by(Comment.created_date).all() # latest added comments
+    for comment in comments:
+        if comment.created_date:
+            comments_list.append(comment)
+        else:
+            pass
+    return comments_list[::-1][:5] # reverse the list and get the first five comments
+
+
+def post_by_id(post_id):
+    post = BlogPost.query.filter_by(id = post_id).first()
+    return post
+
 @app.context_processor
 def categories():
     categories = Category.query.all()
-    return dict(categories=categories)
+    return dict(categories = categories,
+                latest_comments = latest_comments,
+                post_by_id = post_by_id
+                )
 
 @app.template_filter()
 def timesince(dt, default="just now"):

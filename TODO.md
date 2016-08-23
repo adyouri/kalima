@@ -1,8 +1,4 @@
-# Testing:
-    # Test Comments created date
-# Add creation date to comments
-
-# Add Latest comments to pages
+# Random posts 
 
 # Tags
 
@@ -11,3 +7,5 @@
 # Comments Threads
 
 # Add image to post
+
+# Add gravatar

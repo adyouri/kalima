@@ -25,6 +25,20 @@ class PostsTestCase(BaseTestCase):
             self.assertTrue(str(post) == "<title From Abd | This is just a test post From Abd >")
             self.assertIn(b'From Abd', response.data)
 
+
+        def test_latest_comments(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response = self.client.get('/', follow_redirects=True)
+            self.assertIn(b'By', response.data)
+            self.assertIn(b'In', response.data)
+
+
+
+
+
         def test_individual_post(self):
             self.client.post(
                                     '/login',

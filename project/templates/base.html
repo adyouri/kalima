@@ -9,11 +9,10 @@
     <title>Bloggr</title>
 </head>
 <body>
-
-   {% for msg in get_flashed_messages() %}
-   <div class="alert">{{msg}}</div>
-   {% endfor %}
     <div class="container">
+       {% for msg in get_flashed_messages() %}
+       <div class="alert alert-info">{{msg}}</div>
+       {% endfor %}
       <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -72,7 +71,28 @@
     {% block content %}
 
     {% endblock %} 
+
+        <div style="margin-bottom: 80px"></div>
+
+    </div>
+    <hr>
+    
+    <div class="container">
+        <h4>Latest comments</h4>
+
+        {% for comment in latest_comments() %}
+        <hr>
+        
+        <span class="label label-primary"> 
+             {{ comment.author.name }} 
+        </span> 
+        in <a href="{{ url_for("posts.post_by_id", id = comment.post_id) }}#{{ comment.id  }}">
+            {{ post_by_id(comment.post_id).title }}
+        </a> 
+        {% endfor %}
+
     <div style="margin-bottom: 80px"></div>
+
     </div>
 </body>
 </html>

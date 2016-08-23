@@ -30,7 +30,7 @@
    <h2>Comments({{ post.comments | count }}): </h2>
    <div class="comments">
        {% for comment in comments %}
-       <div class="comment">
+       <div class="comment" name = {{ comment.id  }}>
            <i>#{{ comment.id }}</i> 
 
             {% if comment.created_date %}
