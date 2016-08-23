@@ -32,14 +32,13 @@ def slugify(string):
 
 def latest_comments():
     comments_list = []
-    comments = Comment.query.order_by(Comment.created_date).all() # latest added comments
+    comments = Comment.query.order_by(Comment.created_date.desc()) # latest added comments
     for comment in comments:
         if comment.created_date:
             comments_list.append(comment)
         else:
             pass
-    return comments_list[::-1][:5] # reverse the list and get the first five comments
-
+    return comments_list[:5] # only the first five recently added comments
 
 def post_by_id(post_id):
     post = BlogPost.query.filter_by(id = post_id).first()

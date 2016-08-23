@@ -9,3 +9,5 @@
 # Add image to post
 
 # Add gravatar
+
+# Add pagination (sqlalchemy orm)
