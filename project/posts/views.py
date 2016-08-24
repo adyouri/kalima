@@ -8,6 +8,8 @@ from . import posts_blueprint
 from forms import PostForm, CommentForm
 from project import db
 
+
+
 @posts_blueprint.route("/posts/<int:id>", methods=["GET", "POST"])
 @login_required
 def post_by_id(id):

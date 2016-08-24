@@ -1,5 +1,3 @@
-# Random posts 
-
 # Tags
 
 # Add slugs to posts (bloggr.com/id-post-title-here)

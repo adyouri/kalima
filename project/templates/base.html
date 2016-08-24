@@ -94,5 +94,20 @@
     <div style="margin-bottom: 80px"></div>
 
     </div>
+
+
+
+    <hr>
+    
+    <div class="container">
+        <h4>Random Posts</h4>
+
+        {% for post in random_posts %}
+        <hr>
+        <a href="{{ url_for("posts.post_by_id", id = post.id) }}">{{ post.title }}</a>
+        {% endfor %}
+    <div style="margin-bottom: 80px"></div>
+    </div>
+
 </body>
 </html>

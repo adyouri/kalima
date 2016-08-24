@@ -10,6 +10,7 @@ login_manager.init_app(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.expression import func
 db = SQLAlchemy(app)
 from posts import posts_blueprint
 from users import users_blueprint
@@ -44,13 +45,19 @@ def post_by_id(post_id):
     post = BlogPost.query.filter_by(id = post_id).first()
     return post
 
+
+random_posts = BlogPost.query.order_by(func.random()).limit(3)
+
 @app.context_processor
 def categories():
     categories = Category.query.all()
     return dict(categories = categories,
                 latest_comments = latest_comments,
-                post_by_id = post_by_id
+                post_by_id = post_by_id,
+                random_posts = random_posts,
                 )
+
+
 
 @app.template_filter()
 def timesince(dt, default="just now"):
