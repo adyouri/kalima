@@ -11,6 +11,7 @@
     {% endif %}
 
     In <span class="label label-info"> 
+        <span class="glyphicon glyphicon-tag"></span>
          
        <a href="{{ url_for("posts.posts_by_category", 
                category=post.category.name)
@@ -19,14 +20,14 @@
     </span>
     
     By <span class="label label-primary"> 
-     
+    <span class="glyphicon glyphicon-user"></span>
     <a href="{{ url_for("users.posts_by_author", 
                author=post.author.name)
             }}">
        {{ post.author.name }} </a> 
     </span>
 
-<span class="cooments-count"> ({{ post.comments | count }})</span>
+<span class="badge" style="margin-left: 4px;"><span class="glyphicon glyphicon-comment"></span> {{ post.comments | count }}</span>
 <hr>
 
 <br>

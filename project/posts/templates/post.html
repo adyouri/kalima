@@ -27,7 +27,12 @@
    {% if not comments.first()  %} {# if post has no comments #}
    <i style = "color: #999"> No comments yet</i>
    {% else %}
-   <h2>Comments({{ post.comments | count }}): </h2>
+
+   <h2>Comments
+    <span class="badge" style="margin-left: 4px;">
+    <span class="glyphicon glyphicon-comment"></span> {{ post.comments | count }}</span>
+   </h2>
+
    <div class="comments">
        {% for comment in comments %}
        <div class="comment" name = {{ comment.id  }}>
