@@ -8,6 +8,22 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 
+# many-to-many relationship table | post.tags / tag.posts
+posts_tags = db.Table(
+        "posts_tags",
+        db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), nullable=False),
+        db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), nullable=False),
+        )
+
+class Tag(db.Model):
+    __tablename__ = "tags"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+
+    def __init__(self, name):
+        self.name = name
+
+
 class BlogPost(db.Model):
     __tablename__ = "posts"
     id = db.Column(db.Integer, primary_key=True)
@@ -17,6 +33,7 @@ class BlogPost(db.Model):
     category_id = db.Column(db.Integer, ForeignKey('categories.id'))
     comments = relationship("Comment", backref="post") # post.comments
     created_date = db.Column(db.DateTime)
+    tags = db.relationship('Tag', secondary = posts_tags, backref = db.backref("posts", lazy = "dynamic"))
 
     def __init__(self, title, description, author_id, category_id, created_date = None):
         self.title = title
@@ -27,6 +44,8 @@ class BlogPost(db.Model):
 
     def __repr__(self):
         return '<title {} | {} >'.format(self.title, self.description)
+
+
 
 class Comment(db.Model):
     __tablename__ = "comments"
