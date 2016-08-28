@@ -1,6 +1,6 @@
 from flask import flash, redirect, session, url_for, render_template, abort, request
 
-from project.models import BlogPost, User, Category, Comment
+from project.models import BlogPost, User, Category, Comment, Tag
 
 from  flask_login import current_user, login_required
 
@@ -71,6 +71,10 @@ def add_post():
                 flash("Added New category")
                 category_id = Category.query.filter_by(name = form.category.data).first().id
                 post = BlogPost(title, description, user_id, category_id)
+            tags = form.tags.data.split(" ")
+            for tag in tags:
+                t = Tag(tag)
+                post.tags.append(t)
             db.session.add(post)
             db.session.commit()
             flash("Added New Post")

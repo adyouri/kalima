@@ -1,6 +1,10 @@
-# Favorite posts
+# post_by_tags view
 
-# Tags Form in PostForm // project/posts/forms.py
+# Test Add Tags
+
+# Test Post By Tags
+
+# Favorite posts
 
 # Ask user
 

@@ -11,6 +11,7 @@
                         class="form-control post-textarea") }}
 
         {{ render_field(field=form.category, placeholder="Category", class="form-control") }}
+        {{ render_field(field=form.tags, placeholder="Tags (seperated by a space)", class="form-control") }}
         <button class="btn btn-sm btn-success" type="submit">Add Post</button>
     </form>
     {% if error %}

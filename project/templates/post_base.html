@@ -28,6 +28,23 @@
     </span>
 
 <span class="badge" style="margin-left: 4px;"><span class="glyphicon glyphicon-comment"></span> {{ post.comments | count }}</span>
+
+{% if post.tags %}
+Tags:
+
+{% for tag in post.tags %}
+<span class="label label-warning" style="margin-left: 5px"> 
+        <span class="glyphicon glyphicon-tags"></span>
+         
+       {#
+       <a href="{{ url_for("posts.posts_by_tag", 
+               tag = post.tag.name)
+            }}">
+           #}
+       {{ tag.name }} </a> 
+    </span>
+{% endfor %} 
+{% endif %}
 <hr>
 
 <br>
