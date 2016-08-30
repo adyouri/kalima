@@ -2,7 +2,7 @@ import unittest
 from flask_testing import TestCase
 from flask_login import current_user
 from project import app, db
-from project.models import BlogPost, User, Category, Comment
+from project.models import BlogPost, User, Category, Comment, Tag
 
 class BaseTestCase(TestCase):
     """The Base Test Case"""
@@ -19,6 +19,10 @@ class BaseTestCase(TestCase):
         db.session.add(Category("testing"))
         db.session.add(BlogPost("Testing Post", "This is just a test post", 1, 1))
         db.session.add(BlogPost("From Abd", "This is just a test post From Abd", 2, 1))
+        post = BlogPost("Testing Tag", "This is just a test post to test tags", 2, 1)
+        db.session.add(post)
+        tag = Tag("tests")
+        post.tags.append(tag)
         db.session.add(Comment("Test comment", 1, 2))
         db.session.commit()
 

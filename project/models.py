@@ -15,6 +15,14 @@ posts_tags = db.Table(
         db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), nullable=False),
         )
 
+# many-to-many relationship table | user.fav_posts / post.fav_users
+favs = db.Table(
+        "favs",
+        db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), nullable=False),
+        db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+        )
+
+
 class Tag(db.Model):
     __tablename__ = "tags"
     id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +42,7 @@ class BlogPost(db.Model):
     comments = relationship("Comment", backref="post") # post.comments
     created_date = db.Column(db.DateTime)
     tags = db.relationship('Tag', secondary = posts_tags, backref = db.backref("posts", lazy = "dynamic"))
+    fav_users = db.relationship('User', secondary = favs, backref = db.backref("fav_posts", lazy = "dynamic"))
 
     def __init__(self, title, description, author_id, category_id, created_date = None):
         self.title = title

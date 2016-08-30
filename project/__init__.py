@@ -3,6 +3,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
+import re
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
@@ -26,10 +27,11 @@ login_manager.login_view = "users.login"
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(id = int(user_id)).first()
+
 @app.template_filter()
 def slugify(string):
-    return string.lower().replace(" ", "-")
-
+    """ Does not work with arabic """
+    return re.sub('[^\w]+', '-', string.lower())
 
 def latest_comments():
     comments_list = []

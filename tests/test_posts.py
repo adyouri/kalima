@@ -97,6 +97,14 @@ class PostsTestCase(BaseTestCase):
             self.assertTrue(str(category) == "<name testing >")
             self.assertIn(b'Testing Post', response.data)
 
+        def test_post_in_tag_page(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response = self.client.get('/tag/tests', follow_redirects=True)
+            self.assertIn(b'Testing Tag', response.data)
+
         def test_page_not_found(self):
             self.client.post(
                                     '/login',
@@ -113,6 +121,15 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/cat/not_existing_category', follow_redirects=False)
+            self.assertEqual(response.status_code, 404)
+
+        def test_tag_not_found(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+
+            response = self.client.get('/tag/not_existing_tag', follow_redirects=False)
             self.assertEqual(response.status_code, 404)
 
         def test_add_post(self):
@@ -147,6 +164,7 @@ class PostsTestCase(BaseTestCase):
                                         data=dict(title="hello date",
                                             description="Description For Date Post",
                                             category="testing",
+                                            tags = "testing test tag_test"
                                             ),
                                         follow_redirects = True)
                 self.assertIn(b'hello', response.data)
@@ -204,10 +222,14 @@ class PostsTestCase(BaseTestCase):
                                         data=dict(title="hello",
                                             description="post with new category",
                                             category="new_category",
+                                            tags="tag0 tag1 tag2",
                                             ),
                                         follow_redirects = True)
                 self.assertIn(b'hello', response.data)
                 self.assertIn(b'/cat/new_category', response.data)
+                self.assertIn(b'tag0', response.data)
+                self.assertIn(b'tag1', response.data)
+                self.assertIn(b'tag2', response.data)
                 self.assertIn(b'abd', response.data)
                 self.assertTrue(current_user.name == "abd")
                 self.assertTrue(current_user.is_active())

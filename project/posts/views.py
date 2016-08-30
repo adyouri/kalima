@@ -23,6 +23,18 @@ def post_by_id(id):
     return render_template("post.html", post = post, comments = comments, form = form)
 
 
+@posts_blueprint.route('/posts/<int:id>/fav')
+@login_required
+def add_fav(id):
+    post = BlogPost.query.filter_by(id = id).first_or_404()
+    post.fav_users.append(current_user)
+    flash('post "{}" was successfully added to your favorites'.format(post.title))
+    return redirect(url_for("posts.post_by_id",
+                            id = id))
+
+
+
+
 @posts_blueprint.route('/')
 @login_required
 def home():
@@ -34,20 +46,25 @@ def home():
 @posts_blueprint.route('/cat/<category>')
 @login_required
 def posts_by_category(category):
-    category = Category.query.filter_by(name = category).first()
+    category = Category.query.filter_by(name = category).first_or_404()
     message = ""
     if category:
         posts = BlogPost.query.filter_by(category_id = category.id)
         if not posts.first():
             message = "No Articles Yet."
-    else:
-        abort(404)
     return render_template("posts_by_category.html",
                             posts = posts,
                             category = category,
                             message = message)
-
-
+@posts_blueprint.route('/tag/<tag>')
+@login_required
+def posts_by_tag(tag):
+    tag = Tag.query.filter_by(name = tag).first_or_404()
+    posts = tag.posts
+    return render_template("posts_by_tag.html",
+                            posts = posts,
+                            tag = tag,
+                            )
 
 @posts_blueprint.route('/welcome')
 def welcome():

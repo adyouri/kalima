@@ -36,11 +36,9 @@ Tags:
 <span class="label label-warning" style="margin-left: 5px"> 
         <span class="glyphicon glyphicon-tags"></span>
          
-       {#
        <a href="{{ url_for("posts.posts_by_tag", 
-               tag = post.tag.name)
+               tag = tag.name)
             }}">
-           #}
        {{ tag.name }} </a> 
     </span>
 {% endfor %} 
