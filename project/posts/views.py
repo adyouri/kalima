@@ -28,7 +28,8 @@ def post_by_id(id):
 def add_fav(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
     post.fav_users.append(current_user)
-    flash('post "{}" was successfully added to your favorites'.format(post.title))
+    db.session.commit()
+    flash('post "{}" was successfully added to your favorites'.format(unicode(post.title)))
     return redirect(url_for("posts.post_by_id",
                             id = id))
 

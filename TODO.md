@@ -1,10 +1,14 @@
 # Favorite posts
-    # ('/posts/<id>/fav') # project/posts/views.py | post.fav_users.append(current_user)
-
-    # user.fav_posts view ('/<user>/favorites') # project/users/views.py
+    # add fav button and ajaxify it
     # post.fav_users # project/posts/views.py
 
 
+# Make Usernames Unique (that user name is already taken)
+    # Test Username is unique
+
+# Make Unique
+
+# User can add a post to favorites only once
 
 # Tags should be unique (like categories) # posts/views.py
 

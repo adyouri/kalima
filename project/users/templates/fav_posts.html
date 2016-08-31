@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <br>
+   <h2> {{ user.name }} Favorites:</h2>
+
+   <h4 style="color:#999">{{message}}</h4>
+
+   {% for post in posts %}
+
+   {% include "post_base.html" %}
+
+   <br>
+   <br>
+
+   {% endfor %} 
+{% endblock %}

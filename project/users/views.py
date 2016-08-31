@@ -8,9 +8,9 @@ from flask_login import login_user, logout_user, login_required
 
 
 
-@users_blueprint.route('/<author>')
-@users_blueprint.route('/u/<author>')
-@users_blueprint.route('/user/<author>')
+@users_blueprint.route('/<string:author>')
+@users_blueprint.route('/u/<string:author>')
+@users_blueprint.route('/user/<string:author>')
 @login_required
 def posts_by_author(author):
     author = User.query.filter_by(name = author).first()
@@ -23,6 +23,18 @@ def posts_by_author(author):
         abort(404)
     return render_template("posts_by_author.html", posts=posts, author = author, message = message)
 
+@users_blueprint.route('/user/<string:username>/favorites')
+@login_required
+def fav_posts(username):
+    user = User.query.filter_by(name = username).first()
+    message = ""
+    if user:
+        posts = user.fav_posts
+        if not posts.first():
+            message = "No Favorites Yet."
+    else:
+        abort(404)
+    return render_template("fav_posts.html", posts = posts, user = user, message = message)
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
