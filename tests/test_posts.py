@@ -251,6 +251,30 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'Field cannot be longer than 100 characters.', response.data)
                 self.assertIn(b'This field is required.', response.data)
 
+        def test_add_favorite(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response = self.client.get('/posts/1/fav', follow_redirects=True)
+            self.assertIn(b'post &#34;Testing Post&#34; was successfully added to your favorites', response.data)
+            
+        def test_favorites_page(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response = self.client.get('/user/admin/favorites', follow_redirects=True)
+            self.assertIn(b'Testing Post', response.data)
+        def test_favorited_post_has_fav_users_list(self):
+            self.client.post(
+                    '/login',
+                    data=dict(username="abd", password="abd"),
+                    follow_redirects=True)
+            self.client.get('posts/1/fav', follow_redirects=True)
+            response = self.client.get('posts/1', follow_redirects=True)
+            self.assertIn(b'<li>abd</li>', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()
