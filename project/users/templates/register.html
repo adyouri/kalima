@@ -15,6 +15,10 @@
 
         {{ render_field(field=form.confirm, placeholder="password confirmation", class="form-control") }}
 
+        <br>
+        <span>- {{ g.message }}</span>
+        <br>
+
         <button class="btn btn-sm btn-success" type="submit">Sign Up</button>
     </form>
     {% if error %}

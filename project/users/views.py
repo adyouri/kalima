@@ -1,12 +1,26 @@
 from . import users_blueprint
-from flask import flash, redirect, url_for, render_template, abort, request
+from flask import flash, redirect, url_for, render_template, abort, request, g
 from project.models import User, BlogPost
 from forms import LoginForm, RegisterForm
 from project import bcrypt, LoginManager, db
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
-
-
+def check_and_add_user(name, email, password):
+    check_username = User.query.filter_by(name = name).first()
+    check_email = User.query.filter_by(email = email).first()
+    if check_username and check_email:
+        g.message =  "Email and Username already registered"
+    elif check_username:
+        g.message =  "Username Already Taken"
+    elif check_email:
+        g.message = "Email Already Registered"
+    else:
+        user = User(name, email, password)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        flash("You were logged in")
+        return True
 
 @users_blueprint.route('/<string:author>')
 @users_blueprint.route('/u/<string:author>')
@@ -38,6 +52,8 @@ def fav_posts(username):
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_active():
+        return redirect(url_for("posts.home"))
     error = None
     form = LoginForm(request.form)
     if request.method == 'POST':
@@ -59,26 +75,17 @@ def logout():
     logout_user()
     return redirect(url_for('posts.home'))
 
-
 @users_blueprint.route('/register', methods=["GET", "POST"])
 def register():
+    if current_user.is_active():
+        return redirect(url_for("posts.home"))
     form = RegisterForm()
+    g.message = ""
     if form.validate_on_submit():
-        user = User(
-                name = form.username.data,
-                email = form.email.data,
-                password = form.password.data
-                )
-        db.session.add(user)
-        db.session.commit()
-        login_user(user)
-        flash("You were logged in")
-        return redirect(url_for('posts.home'))
+        name = form.username.data
+        email = form.email.data
+        password = form.password.data
+        if check_and_add_user(name, email, password) == True:
+            return redirect(url_for('posts.home'))
     return render_template("register.html", form = form) 
-
-
-
-
-
-
 
