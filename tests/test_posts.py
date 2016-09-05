@@ -257,7 +257,7 @@ class PostsTestCase(BaseTestCase):
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
             response = self.client.get('/posts/1/fav', follow_redirects=True)
-            self.assertIn(b'post &#34;Testing Post&#34; was successfully added to your favorites', response.data)
+            self.assertIn(b'post &#34;1&#34; was successfully added to your favorites', response.data)
             
         def test_favorites_page(self):
             self.client.post(

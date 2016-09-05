@@ -85,6 +85,42 @@ class UsersTestCase(BaseTestCase):
                 self.assertTrue(current_user.name == "test_user")
                 self.assertTrue(current_user.is_active())
 
+        def test_username_is_already_taken(self):
+            with self.client:
+                response = self.client.post(
+                                        '/register',
+                                        data=dict(username="abd",
+                                            email="testing@email.co",
+                                            password="testpassword",
+                                            confirm="testpassword"),
+                                        follow_redirects = True)
+                self.assertIn(b'Username Already Taken', response.data)
+                self.assertFalse(current_user.is_active())
+
+        def test_email_is_already_registered(self):
+            with self.client:
+                response = self.client.post(
+                                        '/register',
+                                        data=dict(username="testing_user",
+                                            email="admin@g.co",
+                                            password="testpassword",
+                                            confirm="testpassword"),
+                                        follow_redirects = True)
+                self.assertIn(b'Email Already Registered', response.data)
+                self.assertFalse(current_user.is_active())
+
+        def test_email_username_already_registered(self):
+            with self.client:
+                response = self.client.post(
+                                        '/register',
+                                        data=dict(username="abd",
+                                            email="admin@g.co",
+                                            password="testpassword",
+                                            confirm="testpassword"),
+                                        follow_redirects = True)
+                self.assertIn(b'Email and Username already registered', response.data)
+                self.assertFalse(current_user.is_active())
+
         def test_incorrect_registration(self):
             with self.client:
                 response = self.client.post(
@@ -103,6 +139,34 @@ class UsersTestCase(BaseTestCase):
             self.assertTrue(bcrypt.check_password_hash(user.password, "admin"))
             self.assertFalse(bcrypt.check_password_hash(user.password, "incorrect"))
 
+        def test_redirecting_on_login_if_user_is_active(self):
+            with self.client:
+                self.client.post(
+                                        '/login',
+                                        data=dict(username="admin", password="admin"),
+                                        follow_redirects = True)
+
+                response = self.client.get(
+                                        '/login',
+                                        follow_redirects = True)
+
+                self.assertTrue(current_user.is_active())
+                self.assertIn(b'Testing Post', response.data)
+
+
+        def test_redirecting_on_register_if_user_is_active(self):
+            with self.client:
+                self.client.post(
+                                        '/login',
+                                        data=dict(username="admin", password="admin"),
+                                        follow_redirects = True)
+
+                response = self.client.get(
+                                        '/register',
+                                        follow_redirects = True)
+
+                self.assertTrue(current_user.is_active())
+                self.assertIn(b'Testing Post', response.data)
 
 
 

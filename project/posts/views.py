@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import flash, redirect, session, url_for, render_template, abort, request
 
 from project.models import BlogPost, User, Category, Comment, Tag
@@ -29,7 +30,7 @@ def add_fav(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
     post.fav_users.append(current_user)
     db.session.commit()
-    flash('post "{}" was successfully added to your favorites'.format(unicode(post.title)))
+    flash('post "{}" was successfully added to your favorites'.format(post.id))
     return redirect(url_for("posts.post_by_id",
                             id = id))
 
