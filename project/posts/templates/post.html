@@ -1,5 +1,5 @@
-{% from "_formhelpers.html" import render_field %}
 
+{% from "_formhelpers.html" import render_field %}
 
 {% extends "base.html" %}
 {% block content %}
@@ -8,6 +8,17 @@
        <strong>Post:</strong> {{ post.description }} <br>
        <br>
        <br>
+        {% if current_user not in post.fav_users %}
+       <a href="#" onclick="add_to_favorites({{post.id}})">
+           <span style = "color:grey" class="glyphicon glyphicon-heart" title="Add to favorites" id ="favorite-icon" >
+       </a>
+        {% else %}
+       <a href="#" onclick="remove_from_favorites({{post.id}})">
+           <span style = "color:red" class="glyphicon glyphicon-heart" title="Remove from favorites" id ="favorite-icon" >
+       </a>
+        {% endif %}
+    
+    </span>
    <div class="fav-users">
        <h5>This post is favorited by:</h5>
        <ul>
