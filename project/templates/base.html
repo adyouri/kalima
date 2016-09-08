@@ -52,6 +52,14 @@
                 <li>
                        <a href="{{ url_for("posts.add_post") }}">Add New Post</a> 
                 </li>
+
+                <li>
+                       <a href="{{ url_for("users.fav_posts", username = current_user.name) }}">
+                       <span class="glyphicon glyphicon-heart"> </span> My Favorites
+                       </a> 
+                </li>
+
+
                  <li>
                        <a href="{{ url_for("users.logout") }}">Log out</a>
                  </li>

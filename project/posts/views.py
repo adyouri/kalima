@@ -34,7 +34,15 @@ def add_fav(id):
     return redirect(url_for("posts.post_by_id",
                             id = id))
 
-
+@posts_blueprint.route('/posts/<int:id>/unfav')
+@login_required
+def remove_fav(id):
+    post = BlogPost.query.filter_by(id = id).first_or_404()
+    post.fav_users.remove(current_user)
+    db.session.commit()
+    flash('post "{}" was successfully removed from your favorites'.format(post.id))
+    return redirect(url_for("posts.post_by_id",
+                            id = id))
 
 
 @posts_blueprint.route('/')
