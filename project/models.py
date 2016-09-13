@@ -13,6 +13,7 @@ posts_tags = db.Table(
         "posts_tags",
         db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), nullable=False),
         db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), nullable=False),
+        db.PrimaryKeyConstraint('post_id', 'tag_id')
         )
 
 # many-to-many relationship table | user.fav_posts / post.fav_users
@@ -20,6 +21,7 @@ favs = db.Table(
         "favs",
         db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), nullable=False),
         db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+        db.PrimaryKeyConstraint('post_id', 'user_id')
         )
 
 

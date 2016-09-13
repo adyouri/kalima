@@ -1,11 +1,12 @@
-# Favorites
-     # Add /unfav route to remove post from favorites list
-     # Add remove_from_favorites() function on project/static/js/main.js
-     # Reload fav_users list
+# Test /post/<int:id>/fav_users
 
-# Make Categories and Tags Unique
+# Add option to make favorited posts private
+
+# Ajaxify Comments
 
 # User can add a post to favorites only once
+
+# Add some comments and docstrings to the code
 
 # Tags should be unique (like categories) # posts/views.py
 

@@ -230,9 +230,33 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'tag0', response.data)
                 self.assertIn(b'tag1', response.data)
                 self.assertIn(b'tag2', response.data)
-                self.assertIn(b'abd', response.data)
                 self.assertTrue(current_user.name == "abd")
-                self.assertTrue(current_user.is_active())
+        def test_tag_has_posts(self):
+            with self.client:
+                self.client.post(
+                        '/login',
+                        data=dict(username="abd", password="abd"),
+                        follow_redirects = True)
+
+                self.client.post(
+                                        '/add_post',
+                                        data=dict(title="hello",
+                                            description="post with new category",
+                                            category="new_category",
+                                            tags="tag0 tag1 tag2",
+                                            ),
+                                        follow_redirects = True)
+
+                self.client.post(
+                                        '/add_post',
+                                        data=dict(title="Hello2",
+                                            description="post with tag0",
+                                            category="new_category",
+                                            tags="tag0",
+                                            ), follow_redirects=True)
+                response = self.client.get('/tag/tag0')
+                self.assertIn(b'Hello2', response.data)
+                self.assertIn(b'hello', response.data)
 
         def test_incorrect_add_post(self):
             with self.client:
@@ -274,6 +298,17 @@ class PostsTestCase(BaseTestCase):
             self.client.get('posts/1/fav', follow_redirects=True)
             response = self.client.get('posts/1', follow_redirects=True)
             self.assertIn(b'<li>abd</li>', response.data)
+
+
+        def test_fav_users_api_list(self):
+            self.client.post(
+                                    '/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            self.client.get('/posts/1/fav', follow_redirects=True)
+            response = self.client.get('/posts/1/fav_users')
+            self.assertIn(b'admin', response.data)
+ 
 
 
 if __name__ == '__main__':

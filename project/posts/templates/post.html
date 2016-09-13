@@ -8,22 +8,18 @@
        <strong>Post:</strong> {{ post.description }} <br>
        <br>
        <br>
-        {% if current_user not in post.fav_users %}
-       <a href="#" onclick="add_to_favorites({{post.id}})">
-           <span style = "color:grey" class="glyphicon glyphicon-heart" title="Add to favorites" id ="favorite-icon" >
-       </a>
-        {% else %}
-       <a href="#" onclick="remove_from_favorites({{post.id}})">
-           <span style = "color:red" class="glyphicon glyphicon-heart" title="Remove from favorites" id ="favorite-icon" >
-       </a>
-        {% endif %}
-    
+        <script>reload_list_of_fav_users({{post.id}})</script>
+    {% if current_user not in post.fav_users %}    
+    <span style = "color:grey; cursor:pointer" class="glyphicon glyphicon-heart" title="Add to favorites" id ="favorite-icon" onclick="add_to_favorites({{post.id}})">
+    {% else %}
+    <span style = "color:red; cursor:pointer" class="glyphicon glyphicon-heart" title="Remove from favorites" id ="favorite-icon" onclick="remove_from_favorites({{post.id}})">
+    {% endif %}
     </span>
    <div class="fav-users">
        <h5>This post is favorited by:</h5>
-       <ul>
+       <ul id="fav-users">
            {% for u in post.fav_users %}
-           <li>{{u.name}}</li>
+                <li>{{ u.name }}</li>
            {% endfor %}
        </ul>
    
