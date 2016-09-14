@@ -100,6 +100,7 @@ class User(db.Model):
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
+    private_favorites = db.Column(db.Boolean, default = True)
     posts = relationship("BlogPost", backref="author")
     comments = relationship("Comment", backref="author") # comment.author.(id, name, email...)
 

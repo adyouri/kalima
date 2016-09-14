@@ -1,14 +1,14 @@
-# Test /post/<int:id>/fav_users
+# Test user cannot access ('/<user>/favorites') if user has private_favorites == True (You cannot access this page because this user's favorite posts are private!)
 
 # Add option to make favorited posts private
 
+# Add User setttings (change email, password, private favorates...)
+
+# A User Cannot access other users settings
+
 # Ajaxify Comments
 
-# User can add a post to favorites only once
-
 # Add some comments and docstrings to the code
-
-# Tags should be unique (like categories) # posts/views.py
 
 # Ask user
 
