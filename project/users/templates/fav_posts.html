@@ -1,30 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-
    <br>
-   {% if user.private_favorites == True 
-      and user != current_user %}
-
-        <h1 style = "color: #a7a7a7">You cannot access this page because this user's favorite posts are private!</h1>
-       <br>
-       <br>
-       <h4>
-           <a href="{{url_for('posts.home')}}">Return to the Homepage</a>
-       </h4>
-   {% else %}
-       <h2> Favorited posts by {{ user.name }}:</h2>
-
-       <h4 style="color:#999">{{message}}</h4>
-
+   {% if posts %}
+      <h2> Favorited posts by {{ user.name }}:</h2>
+      <h4 style="color:#999">{{message}}</h4>
+      <br>
+      <br>
        {% for post in posts %}
 
        {% include "post_base.html" %}
 
-
+       {% endfor %} 
    <br>
    <br>
-
-   {% endfor %} 
+   {% else %}
+       <h4 style="color:#999">{{message}}</h4>
+       <br>
+       <h4>
+           <a href="{{ url_for('posts.home') }}">Return to the Homepage</a>
+       </h4>
    {% endif %}
 {% endblock %}

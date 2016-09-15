@@ -1,3 +1,4 @@
+
 # Test user cannot access ('/<user>/favorites') if user has private_favorites == True (You cannot access this page because this user's favorite posts are private!)
 
 # Add option to make favorited posts private

@@ -43,9 +43,13 @@ def fav_posts(username):
     user = User.query.filter_by(name = username).first()
     message = ""
     if user:
-        posts = user.fav_posts
-        if not posts.first():
-            message = "No Favorites Yet."
+        if user.private_favorites and user != current_user:
+            message = "You cannot access this page because this user's favorite posts are private!"
+            posts = None
+        else:
+            posts = user.fav_posts
+            if not posts.first():
+                message = "No Favorites Yet."
     else:
         abort(404)
     return render_template("fav_posts.html", posts = posts, user = user, message = message)
