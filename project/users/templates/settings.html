@@ -1,0 +1,46 @@
+{% from "_formhelpers.html" import render_field %}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>User Settings:</h1>
+
+<br>
+
+<h3>Edit user information:</h3>
+<br>
+
+    <form class="form-signup" action="" role="form" method="post">
+        {{ form.csrf_token }}
+
+        {{ render_field(field=form.email, placeholder="email", class="form-control", value=current_user.email ) }}
+
+        {{ render_field(field=form.current_password, placeholder="current password", class="form-control") }}
+        {{ render_field(field=form.new_password, placeholder="new password", class="form-control") }}
+
+        {{ render_field(field=form.confirm, placeholder="new password confirmation", class="form-control") }}
+
+        <br>
+        <br>
+    {% if error %}
+    <strong>Error: </strong><div class="alert">{{ error}} </div>
+    {% endif %}
+
+
+
+    <h3>Favorites:</h3>
+    {% if current_user.private_favorites %}
+
+
+            {{ render_field(field=form.private_favs) }} 
+
+    {% else %}
+
+            {{ render_field(field=form.private_favs) }}
+
+    {% endif %}
+
+    <button class="btn btn-sm btn-success" type="submit">Save Settings</button>
+
+    </form>
+{% endblock %}

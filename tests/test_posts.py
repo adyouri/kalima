@@ -280,16 +280,17 @@ class PostsTestCase(BaseTestCase):
                                     '/login',
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
-            response = self.client.get('/posts/1/fav', follow_redirects=True)
-            self.assertIn(b'post &#34;1&#34; was successfully added to your favorites', response.data)
+            response = self.client.get('/posts/2/fav', follow_redirects=True)
+            self.assertIn(b'post &#34;2&#34; was successfully added to your favorites', response.data)
             
         def test_favorites_page(self):
             self.client.post(
                                     '/login',
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
-            response = self.client.get('/user/admin/favorites', follow_redirects=True)
+            response = self.client.get('/users/admin/favorites', follow_redirects=True)
             self.assertIn(b'Testing Post', response.data)
+
         def test_favorited_post_has_fav_users_list(self):
             self.client.post(
                     '/login',
@@ -308,7 +309,25 @@ class PostsTestCase(BaseTestCase):
             self.client.get('/posts/1/fav', follow_redirects=True)
             response = self.client.get('/posts/1/fav_users')
             self.assertIn(b'admin', response.data)
- 
+
+        def test_user_cannot_access_others_private_favorites(self):
+
+            self.client.post(
+                    '/login',
+                    data=dict(username="abd", password="abd"),
+                    follow_redirects=True)
+            response = self.client.get('/users/admin/favorites', follow_redirects=True)
+            self.assertIn(b'You cannot access this page', response.data)
+
+
+        def test_user_can_access_his_private_favorites(self):
+            self.client.post(
+                    '/login',
+                    data=dict(username="admin", password="admin"),
+                    follow_redirects=True)
+            response = self.client.get('/users/admin/favorites', follow_redirects=True)
+            self.assertIn(b'Testing Post', response.data)
+
 
 
 if __name__ == '__main__':

@@ -1,9 +1,16 @@
 from . import users_blueprint
 from flask import flash, redirect, url_for, render_template, abort, request, g
 from project.models import User, BlogPost
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, SettingsForm
 from project import bcrypt, LoginManager, db
 from flask_login import login_user, logout_user, login_required, current_user
+
+
+
+
+
+def change_user_settings(email, current_password, password, private_favs):
+    print email, current_password, password, private_favs
 
 def check_and_add_user(name, email, password):
     check_username = User.query.filter_by(name = name).first()
@@ -25,6 +32,7 @@ def check_and_add_user(name, email, password):
 @users_blueprint.route('/<string:author>')
 @users_blueprint.route('/u/<string:author>')
 @users_blueprint.route('/user/<string:author>')
+@users_blueprint.route('/users/<string:author>')
 @login_required
 def posts_by_author(author):
     author = User.query.filter_by(name = author).first()
@@ -37,7 +45,7 @@ def posts_by_author(author):
         abort(404)
     return render_template("posts_by_author.html", posts=posts, author = author, message = message)
 
-@users_blueprint.route('/user/<string:username>/favorites')
+@users_blueprint.route('/users/<string:username>/favorites')
 @login_required
 def fav_posts(username):
     user = User.query.filter_by(name = username).first()
@@ -92,4 +100,22 @@ def register():
         if check_and_add_user(name, email, password) == True:
             return redirect(url_for('posts.home'))
     return render_template("register.html", form = form) 
+
+
+@users_blueprint.route('/settings', methods=['POST', 'GET'])
+@login_required
+def settings():
+    form = SettingsForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        current_password = form.current_password.data
+        new_password = form.new_password.data
+        private_favs = form.private_favs.data
+        change_user_settings(email,
+                             current_password,
+                             new_password,
+                             private_favs) 
+        return redirect(url_for('users.settings'))
+    return render_template('settings.html', form=form)
+
 

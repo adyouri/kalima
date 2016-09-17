@@ -1,17 +1,14 @@
-
-# Test user cannot access ('/<user>/favorites') if user has private_favorites == True (You cannot access this page because this user's favorite posts are private!)
-
-# Add option to make favorited posts private
-
 # Add User setttings (change email, password, private favorates...)
 
-# A User Cannot access other users settings
+# Add Following/Followers
 
-# Ajaxify Comments
+#  Ajaxify follow button and Comments  
 
 # Add some comments and docstrings to the code
 
 # Ask user
+
+# OAuth with facebook/twitter/gplus
 
 # Add slugs to posts (bloggr.com/id-post-title-here)
 
@@ -23,4 +20,6 @@
 
 # Add pagination (sqlalchemy orm)
 
-# Add Following/Followers
+# Add a phone number column to provide double auth
+
+# Use Twillio to confirm user's phone number
