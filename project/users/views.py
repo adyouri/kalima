@@ -9,8 +9,23 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 
 
-def change_user_settings(email, current_password, password, private_favs):
-    print email, current_password, password, private_favs
+def change_user_settings(email, current_password, new_password, private_favorites):
+    message = None
+    if current_user.email != email:
+        current_user.email = email
+    if (current_password != "" and\
+            bcrypt.check_password_hash(
+            current_user.password, current_password)):
+        current_user.update_password(new_password)
+    elif (current_password == ""):
+        message = None
+    else:
+        message = "Current password is incorrect"
+    current_user.private_favorites = private_favorites
+    if db.session.dirty:
+        db.session.commit()
+        flash('You have successfully changed your settings')
+    return message
 
 def check_and_add_user(name, email, password):
     check_username = User.query.filter_by(name = name).first()
@@ -105,17 +120,46 @@ def register():
 @users_blueprint.route('/settings', methods=['POST', 'GET'])
 @login_required
 def settings():
+    message = None
     form = SettingsForm()
+    form.private_favs.default = current_user.private_favorites
     if form.validate_on_submit():
         email = form.email.data
         current_password = form.current_password.data
         new_password = form.new_password.data
         private_favs = form.private_favs.data
-        change_user_settings(email,
-                             current_password,
-                             new_password,
-                             private_favs) 
-        return redirect(url_for('users.settings'))
-    return render_template('settings.html', form=form)
+        message = change_user_settings(email=email,
+                             current_password=current_password,
+                             new_password=new_password,
+                             private_favorites=private_favs) 
+        if not message:
+            return redirect(url_for('users.settings'))
+    return render_template('settings.html', form=form, message=message)
+
+@users_blueprint.route('/users/<string:username>/follow')
+def follow(username):
+    user = User.query.filter_by(name = username).first()
+    current_user.follow(user)
+    db.session.commit()
+    return redirect(url_for('posts.home'))
+
+@users_blueprint.route('/users/<string:username>/unfollow')
+def unfollow(username):
+    user = User.query.filter_by(name = username).first()
+    current_user.unfollow(user)
+    db.session.commit()
+    return redirect(url_for('posts.home'))
+@users_blueprint.route('/users/<string:username>/profile')
+def profile(username):
+    message = None
+    user = User.query.filter_by(name = username).first() 
+    posts = BlogPost.query.filter(BlogPost.author_id == user.id).order_by(BlogPost.created_date.desc()).limit(5)
+    if not posts:
+        message = "No Posts Yet"
+    return render_template("profile.html", posts = posts, user = user)
+
+
+
+
 
 

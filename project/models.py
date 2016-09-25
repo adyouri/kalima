@@ -25,6 +25,18 @@ favs = db.Table(
         )
 
 
+
+# many-to-many relationship table | user.fav_posts / post.fav_users
+follows = db.Table(
+        "follows",
+        db.Column('follower_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+        db.Column('followed_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+        )
+
+
+
+
+
 class Tag(db.Model):
     __tablename__ = "tags"
     id = db.Column(db.Integer, primary_key=True)
@@ -103,12 +115,35 @@ class User(db.Model):
     private_favorites = db.Column(db.Boolean, default = True)
     posts = relationship("BlogPost", backref="author")
     comments = relationship("Comment", backref="author") # comment.author.(id, name, email...)
-
+    following = relationship("User",
+                             secondary=follows,
+                             primaryjoin=(follows.c.follower_id == id),
+                             secondaryjoin=(follows.c.followed_id == id),
+                             backref=db.backref("followers",
+                                                 lazy= "dynamic"),
+                             lazy = "dynamic")
 
     def __init__(self, name, email, password):
         self.name = name
         self.email = email
-        self.password = bcrypt.generate_password_hash(password)
+        self.password = bcrypt.generate_password_hash(password.encode('utf-8'))
+
+    def update_password(self, password):
+        """ Because Bcrypt doesn't hash the password when updating (user.password = "new") """
+        self.password = bcrypt.generate_password_hash(password.encode('utf-8'))
+
+    def is_following(self, user):
+        return self.following.filter(follows.c.followed_id == user.id).count() > 0
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.following.append(user)
+            return self
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.following.remove(user)
+            return self
+
 
     def is_active(self):
         return True

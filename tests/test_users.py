@@ -1,7 +1,7 @@
 import unittest
 from flask_login import current_user
 from base import BaseTestCase
-from project import bcrypt
+from project import bcrypt, db
 from project.models import User
 
 
@@ -167,6 +167,50 @@ class UsersTestCase(BaseTestCase):
 
                 self.assertTrue(current_user.is_active())
                 self.assertIn(b'Testing Post', response.data)
+
+        def test_correct_settings(self):
+            with self.client:
+                self.client.post(
+                                        '/login',
+                                        data=dict(username="admin", password="admin"),
+                                        follow_redirects = True)
+
+            with self.client:
+                response = self.client.post(
+                                        '/settings',
+                                        data=dict(
+                                            email="admin@example.com",
+                                            current_password="admin",
+                                            new_password="admino",
+                                            confirm="admino",
+                                            private_favs=False),
+                                            follow_redirects = True)
+                self.assertIn(b'You have successfully changed your settings', response.data)
+                self.assertTrue(bcrypt.check_password_hash(current_user.password, "admino" ))
+                self.assertFalse(bcrypt.check_password_hash(current_user.password, "incorrect" ))
+                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.email == "admin@example.com")
+
+        def test_follow(self):
+            admin = User.query.get(1)
+            abd   = User.query.get(2)
+
+            admin.follow(abd)
+            db.session.commit()
+            self.assertTrue(admin.is_following(abd))
+            self.assertFalse(abd.is_following(admin))
+
+        def test_unfollow(self):
+            admin = User.query.get(1)
+            abd   = User.query.get(2)
+
+            abd.follow(admin)
+            db.session.commit()
+            self.assertTrue(abd.is_following(admin))
+            abd.unfollow(admin)
+            db.session.commit()
+            self.assertFalse(abd.is_following(admin))
+
 
 
 

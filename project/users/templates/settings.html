@@ -22,23 +22,15 @@
 
         <br>
         <br>
-    {% if error %}
-    <strong>Error: </strong><div class="alert">{{ error}} </div>
+    {% if message %}
+    <strong> - {{ message }} </strong>    
     {% endif %}
 
 
 
-    <h3>Favorites:</h3>
-    {% if current_user.private_favorites %}
-
-
+    <h3 title="{{ form.process() }}">Favorites:</h3> {# form.process() did not work in the views properly, so I called here and hided it's resault (which is None) in the title of that tag, not sure if there is a better way to do it #}
+    
             {{ render_field(field=form.private_favs) }} 
-
-    {% else %}
-
-            {{ render_field(field=form.private_favs) }}
-
-    {% endif %}
 
     <button class="btn btn-sm btn-success" type="submit">Save Settings</button>
 

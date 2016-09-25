@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+   <br>
+   <h2>{{ user.name }} Profile:</h2>
+   <hr>
+    <h2>About The User</h2>
+    <p>I am nice !</p>
+   <hr>
+   <h3>Latest Posts By {{ user.name }} :</h3>
+   {% if message %}
+       <p>{{ message }}</p>
+   {% else %}
+       {% for post in posts %}
+       {% include "post_base.html" %}
+       {% endfor %} 
+   {% endif %}
+   <br>
+   <br>
+   <hr>
+
+
+   <hr>
+   
+   <h3>followers:</h3>
+   {% for user in user.followers.all() %}
+   
+   <li>{{ user.name }}</li>
+
+   {% endfor %}
+   <br>
+   <br>
+   <hr>
+
+   <hr>
+   <h3>followings:</h3>
+   {% for user in user.following.all() %}
+   
+   <li>{{ user.name }}</li>
+
+   {% endfor %}
+   <br>
+   <br>
+   <hr>
+
+
+
+
+
+
+
+
+   {% if current_user == user %}
+   <a href="{{ url_for('users.settings') }}"> Change Your Profile Settings </a>
+   {% endif %}
+
+{% endblock %}

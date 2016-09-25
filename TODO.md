@@ -1,10 +1,16 @@
-# Add User setttings (change email, password, private favorates...)
+# Test Following/Followers
 
-# Add Following/Followers
+# Url Prefixes (/posts & /users)
 
-#  Ajaxify follow button and Comments  
+# Ajaxify follow button and Comments  
+
+# Add pagination (sqlalchemy orm)
 
 # Add some comments and docstrings to the code
+
+# Add gravatar
+
+# User Profile
 
 # Ask user
 
@@ -16,9 +22,7 @@
 
 # Add image to post
 
-# Add gravatar
 
-# Add pagination (sqlalchemy orm)
 
 # Add a phone number column to provide double auth
 
