@@ -13,7 +13,7 @@ from project import db
 
 
 
-@posts_blueprint.route("/posts/<int:id>", methods=["GET", "POST"])
+@posts_blueprint.route("/<int:id>", methods=["GET", "POST"])
 @login_required
 def post_by_id(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
@@ -26,7 +26,7 @@ def post_by_id(id):
     return render_template("post.html", post = post, comments = comments, form = form)
 
 
-@posts_blueprint.route('/posts/<int:id>/fav')
+@posts_blueprint.route('/<int:id>/fav')
 @login_required
 def add_fav(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
@@ -40,7 +40,7 @@ def add_fav(id):
                             id = id))
 
 
-@posts_blueprint.route('/posts/<int:id>/fav_users')
+@posts_blueprint.route('/<int:id>/fav_users')
 @login_required
 def fav_users_list(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
@@ -54,7 +54,7 @@ def fav_users_list(id):
 
 
 
-@posts_blueprint.route('/posts/<int:id>/unfav')
+@posts_blueprint.route('/<int:id>/unfav')
 @login_required
 def remove_fav(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
@@ -70,7 +70,7 @@ def remove_fav(id):
 def home():
     posts = BlogPost.query.all()
     user = current_user 
-    return render_template("index.html", posts=posts, user=user)
+    return render_template("posts.html", posts=posts, user=user)
 
 
 @posts_blueprint.route('/cat/<category>')
@@ -100,7 +100,7 @@ def posts_by_tag(tag):
 def welcome():
     return render_template("welcome.html")
 
-@posts_blueprint.route('/add_post', methods=["GET", "POST"])
+@posts_blueprint.route('/new', methods=["GET", "POST"])
 def add_post():
     form = PostForm()
     if request.method == "POST":

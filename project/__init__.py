@@ -1,9 +1,10 @@
 from datetime import datetime
-from flask import Flask
+from flask import Flask, render_template
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
 import re
+
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
@@ -87,3 +88,10 @@ def timesince(dt, default="just now"):
             return "%d %s ago" % (period, singular if period == 1 else plural)
 
     return default
+
+
+@app.route('/')
+def index():
+    posts = BlogPost.query.limit(5)
+    return render_template('index.html', posts = posts)
+

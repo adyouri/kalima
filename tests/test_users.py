@@ -9,26 +9,23 @@ class UsersTestCase(BaseTestCase):
 
         def test_user_not_found(self):
             self.client.post(
-                                    '/login',
+                                    '/users/login',
                                     data=dict(
                                         username="admin",
                                         password="admin"),
                                         follow_redirects = True)
 
-            response = self.client.get('/u/not_existing_user', follow_redirects=False)
-            response1 = self.client.get('/user/not_existing_user', follow_redirects=False)
+            response = self.client.get('/users/not_existing_user', follow_redirects=False)
             self.assertEqual(response.status_code, 404)
-            self.assertEqual(response1.status_code, 404)
 
         def test_post_by_author(self):
             self.client.post(
-                                    '/login',
+                                    '/users/login',
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
-            response = self.client.get('/u/abd', follow_redirects=True)
-            response1 = self.client.get('/admin', follow_redirects=True)
-            response2 = self.client.get('/user/admin', follow_redirects=True)
-            response3 = self.client.get('/user/tester', follow_redirects=True)
+            response = self.client.get('/users/abd', follow_redirects=True)
+            response2 = self.client.get('/users/admin', follow_redirects=True)
+            response3 = self.client.get('/users/tester', follow_redirects=True)
             self.assertIn(b'From Abd', response.data)
             self.assertIn(b'Testing Post', response2.data)
             self.assertIn(b'No Articles Yet.', response3.data)
@@ -36,7 +33,7 @@ class UsersTestCase(BaseTestCase):
         def test_correct_login(self):
             with self.client:
                 response = self.client.post(
-                                        '/login',
+                                        '/users/login',
                                         data=dict(username="admin", password="admin"),
                                         follow_redirects = True)
                 self.assertIn(b'You were logged in', response.data)
@@ -50,32 +47,32 @@ class UsersTestCase(BaseTestCase):
 
         def test_incorrect_login(self):
             response = self.client.post(
-                                    '/login',
+                                    '/users/login',
                                     data=dict(username="wrong", password="admin"),
                                     follow_redirects = True)
             self.assertIn(b'Invalid', response.data)
         def test_logout(self):
             with self.client:
                 self.client.post(
-                                        '/login',
+                                        '/users/login',
                                         data=dict(username="admin", password="admin"),
                                         follow_redirects = True)
-                response = self.client.get('/logout', follow_redirects=True)
+                response = self.client.get('/users/logout', follow_redirects=True)
                 self.assertIn(b'Please login', response.data)
                 self.assertFalse(current_user.is_active())
 
         def test_login_page_loads(self):
-            response = self.client.get('/login', content_type='html/text')
+            response = self.client.get('/users/login', content_type='html/text')
             self.assertTrue(b'Please login' in response.data)
 
         def test_main_route_requires_login(self):
-            response = self.client.get('/', follow_redirects=True)
+            response = self.client.get('/posts/', follow_redirects=True)
             self.assertIn(b'Please login', response.data)
 
         def test_correct_registration(self):
             with self.client:
                 response = self.client.post(
-                                        '/register',
+                                        '/users/register',
                                         data=dict(username="test_user",
                                             email="test@email.co",
                                             password="testpassword",
@@ -88,7 +85,7 @@ class UsersTestCase(BaseTestCase):
         def test_username_is_already_taken(self):
             with self.client:
                 response = self.client.post(
-                                        '/register',
+                                        '/users/register',
                                         data=dict(username="abd",
                                             email="testing@email.co",
                                             password="testpassword",
@@ -100,7 +97,7 @@ class UsersTestCase(BaseTestCase):
         def test_email_is_already_registered(self):
             with self.client:
                 response = self.client.post(
-                                        '/register',
+                                        '/users/register',
                                         data=dict(username="testing_user",
                                             email="admin@g.co",
                                             password="testpassword",
@@ -112,7 +109,7 @@ class UsersTestCase(BaseTestCase):
         def test_email_username_already_registered(self):
             with self.client:
                 response = self.client.post(
-                                        '/register',
+                                        '/users/register',
                                         data=dict(username="abd",
                                             email="admin@g.co",
                                             password="testpassword",
@@ -124,7 +121,7 @@ class UsersTestCase(BaseTestCase):
         def test_incorrect_registration(self):
             with self.client:
                 response = self.client.post(
-                                        '/register',
+                                        '/users/register',
                                         data=dict(username="",
                                             email="teco",
                                             password="test",
@@ -142,12 +139,12 @@ class UsersTestCase(BaseTestCase):
         def test_redirecting_on_login_if_user_is_active(self):
             with self.client:
                 self.client.post(
-                                        '/login',
+                                        '/users/login',
                                         data=dict(username="admin", password="admin"),
                                         follow_redirects = True)
 
                 response = self.client.get(
-                                        '/login',
+                                        '/users/login',
                                         follow_redirects = True)
 
                 self.assertTrue(current_user.is_active())
@@ -157,12 +154,12 @@ class UsersTestCase(BaseTestCase):
         def test_redirecting_on_register_if_user_is_active(self):
             with self.client:
                 self.client.post(
-                                        '/login',
+                                        '/users/login',
                                         data=dict(username="admin", password="admin"),
                                         follow_redirects = True)
 
                 response = self.client.get(
-                                        '/register',
+                                        '/users/register',
                                         follow_redirects = True)
 
                 self.assertTrue(current_user.is_active())
@@ -171,13 +168,13 @@ class UsersTestCase(BaseTestCase):
         def test_correct_settings(self):
             with self.client:
                 self.client.post(
-                                        '/login',
+                                        '/users/login',
                                         data=dict(username="admin", password="admin"),
                                         follow_redirects = True)
 
             with self.client:
                 response = self.client.post(
-                                        '/settings',
+                                        '/users/settings',
                                         data=dict(
                                             email="admin@example.com",
                                             current_password="admin",
@@ -210,6 +207,63 @@ class UsersTestCase(BaseTestCase):
             abd.unfollow(admin)
             db.session.commit()
             self.assertFalse(abd.is_following(admin))
+
+        def test_following_list(self):
+            self.client.post(
+                        '/users/login',
+                        data = dict(username="admin",
+                                    password="admin")
+                        )
+            self.client.get('/users/abd/follow')
+            response = self.client.get('/users/admin/following')
+            self.assertIn('abd', response.data)
+                        
+        def test_following_list_after_unfollow(self):
+            self.client.post(
+                        '/users/login',
+                        data = dict(username="admin",
+                                    password="admin")
+                        )
+            self.client.get('/users/abd/follow')
+            response = self.client.get('/users/admin/following')
+            self.assertIn('abd', response.data)
+            self.client.get('/users/abd/unfollow')
+            response = self.client.get('/users/admin/following')
+            self.assertNotIn('abd', response.data)
+ 
+        def test_followers_list(self):
+            self.client.post(
+                        '/users/login',
+                        data = dict(username="admin",
+                                    password="admin")
+                        )
+            self.client.get('/users/abd/follow')
+            response = self.client.get('/users/abd/followers')
+            self.assertIn('admin', response.data)
+
+        def test_user_profile(self):
+            self.client.post(
+                        '/users/login',
+                        data = dict(username="admin",
+                                    password="admin")
+                        )
+            response1 = self.client.get('/users/abd/profile')
+            response2 = self.client.get('/users/admin/profile')
+            self.assertIn('From Abd', response1.data)
+            self.assertIn('Testing Post', response2.data)
+
+        def test_user_profile_has_no_posts_yet(self):
+            with self.client:
+                 self.client.post(
+                        '/users/register',
+                        data = dict(username="admino",
+                                    email="admino@go.co",
+                                    password="admino",
+                                    confirm="admino")
+                        )
+            response = self.client.get('/users/admino/profile')
+            self.assertIn('No Posts Yet', response.data)
+
 
 
 

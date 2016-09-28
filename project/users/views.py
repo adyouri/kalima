@@ -1,5 +1,7 @@
 from . import users_blueprint
-from flask import flash, redirect, url_for, render_template, abort, request, g
+from flask import (flash, redirect, url_for,
+                   render_template, abort,
+                   request, g, jsonify)
 from project.models import User, BlogPost
 from forms import LoginForm, RegisterForm, SettingsForm
 from project import bcrypt, LoginManager, db
@@ -45,9 +47,6 @@ def check_and_add_user(name, email, password):
         return True
 
 @users_blueprint.route('/<string:author>')
-@users_blueprint.route('/u/<string:author>')
-@users_blueprint.route('/user/<string:author>')
-@users_blueprint.route('/users/<string:author>')
 @login_required
 def posts_by_author(author):
     author = User.query.filter_by(name = author).first()
@@ -60,7 +59,7 @@ def posts_by_author(author):
         abort(404)
     return render_template("posts_by_author.html", posts=posts, author = author, message = message)
 
-@users_blueprint.route('/users/<string:username>/favorites')
+@users_blueprint.route('/<string:username>/favorites')
 @login_required
 def fav_posts(username):
     user = User.query.filter_by(name = username).first()
@@ -136,29 +135,52 @@ def settings():
             return redirect(url_for('users.settings'))
     return render_template('settings.html', form=form, message=message)
 
-@users_blueprint.route('/users/<string:username>/follow')
+@users_blueprint.route('/<string:username>/follow')
+@login_required
 def follow(username):
     user = User.query.filter_by(name = username).first()
     current_user.follow(user)
     db.session.commit()
     return redirect(url_for('posts.home'))
 
-@users_blueprint.route('/users/<string:username>/unfollow')
+
+@users_blueprint.route('/<string:username>/unfollow')
+@login_required
 def unfollow(username):
     user = User.query.filter_by(name = username).first()
     current_user.unfollow(user)
     db.session.commit()
     return redirect(url_for('posts.home'))
-@users_blueprint.route('/users/<string:username>/profile')
+
+@users_blueprint.route('/<string:username>/profile')
 def profile(username):
     message = None
     user = User.query.filter_by(name = username).first() 
     posts = BlogPost.query.filter(BlogPost.author_id == user.id).order_by(BlogPost.created_date.desc()).limit(5)
-    if not posts:
+    if not posts.first():
         message = "No Posts Yet"
-    return render_template("profile.html", posts = posts, user = user)
+    return render_template("profile.html",
+                           posts = posts,
+                           user = user,
+                           message = message)
 
 
+
+
+
+@users_blueprint.route('/<string:username>/followers')
+def followers(username):
+    user = User.query.filter_by(name = username).first() 
+    followers = {"followers": [user.name for user in user.followers.all()]}
+
+    return jsonify(**followers)
+
+
+@users_blueprint.route('/<string:username>/following')
+def following(username):
+    user = User.query.filter_by(name = username).first() 
+    following = {"following": [user.name for user in user.following.all()]}
+    return jsonify(**following)
 
 
 
