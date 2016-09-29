@@ -1,5 +1,3 @@
-# Remove 'login_required' from some routes
-
 # Add "Ask User" to User Profile
 
 # Handle errors (404, 502, 500 ...)

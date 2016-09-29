@@ -57,7 +57,8 @@ class UsersTestCase(BaseTestCase):
                                         '/users/login',
                                         data=dict(username="admin", password="admin"),
                                         follow_redirects = True)
-                response = self.client.get('/users/logout', follow_redirects=True)
+                self.client.get('/users/logout', follow_redirects=True)
+                response = self.client.get('/users/settings', follow_redirects=True)
                 self.assertIn(b'Please login', response.data)
                 self.assertFalse(current_user.is_active())
 
@@ -65,8 +66,8 @@ class UsersTestCase(BaseTestCase):
             response = self.client.get('/users/login', content_type='html/text')
             self.assertTrue(b'Please login' in response.data)
 
-        def test_main_route_requires_login(self):
-            response = self.client.get('/posts/', follow_redirects=True)
+        def test_route_requires_login(self):
+            response = self.client.get('/users/settings', follow_redirects=True)
             self.assertIn(b'Please login', response.data)
 
         def test_correct_registration(self):

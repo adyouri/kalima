@@ -14,7 +14,6 @@ from project import db
 
 
 @posts_blueprint.route("/<int:id>", methods=["GET", "POST"])
-@login_required
 def post_by_id(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
     comments = Comment.query.filter_by(post_id = post.id)
@@ -41,7 +40,6 @@ def add_fav(id):
 
 
 @posts_blueprint.route('/<int:id>/fav_users')
-@login_required
 def fav_users_list(id):
     post = BlogPost.query.filter_by(id = id).first_or_404()
     fav_users_list = [user.name for user in post.fav_users]
@@ -66,15 +64,12 @@ def remove_fav(id):
 
 
 @posts_blueprint.route('/')
-@login_required
 def home():
     posts = BlogPost.query.all()
-    user = current_user 
-    return render_template("posts.html", posts=posts, user=user)
+    return render_template("posts.html", posts=posts)
 
 
 @posts_blueprint.route('/cat/<category>')
-@login_required
 def posts_by_category(category):
     category = Category.query.filter_by(name = category).first_or_404()
     message = ""
@@ -87,7 +82,6 @@ def posts_by_category(category):
                             category = category,
                             message = message)
 @posts_blueprint.route('/tag/<tag>')
-@login_required
 def posts_by_tag(tag):
     tag = Tag.query.filter_by(name = tag).first_or_404()
     posts = tag.posts

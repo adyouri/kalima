@@ -47,7 +47,6 @@ def check_and_add_user(name, email, password):
         return True
 
 @users_blueprint.route('/<string:author>')
-@login_required
 def posts_by_author(author):
     author = User.query.filter_by(name = author).first()
     message = ""
@@ -60,7 +59,6 @@ def posts_by_author(author):
     return render_template("posts_by_author.html", posts=posts, author = author, message = message)
 
 @users_blueprint.route('/<string:username>/favorites')
-@login_required
 def fav_posts(username):
     user = User.query.filter_by(name = username).first()
     message = ""
