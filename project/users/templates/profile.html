@@ -3,6 +3,18 @@
    <br>
    <h2>{{ user.name }} Profile:</h2>
    <hr>
+
+   {% if current_user.is_active() %}
+   <br>
+   <h4>
+       <span id="follow-btn" class="label label-info" onclick="follow('{{user.name}}')">
+           follow {{ user.name }}
+       </span>
+   
+   </h4>
+   <hr>
+   {% endif %}
+ 
     <h2>About The User</h2>
     <p>I am nice !</p>
    <hr>

@@ -139,7 +139,7 @@ def follow(username):
     user = User.query.filter_by(name = username).first()
     current_user.follow(user)
     db.session.commit()
-    return redirect(url_for('posts.home'))
+    return jsonify({"status": 200})
 
 
 @users_blueprint.route('/<string:username>/unfollow')
@@ -148,7 +148,7 @@ def unfollow(username):
     user = User.query.filter_by(name = username).first()
     current_user.unfollow(user)
     db.session.commit()
-    return redirect(url_for('posts.home'))
+    return jsonify({"status": 200})
 
 @users_blueprint.route('/<string:username>/profile')
 def profile(username):

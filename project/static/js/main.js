@@ -55,4 +55,38 @@ function reload_list_of_fav_users(post_id){
 
 };
 
+function follow(username) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     var element = document.getElementById("follow-btn")
+     element.setAttribute("class", "label label-danger")
+     element.setAttribute("onclick", "unfollow('"+username+"')")
+     element.innerHTML = "unfollow " + username
 
+
+        //reload_list_of_followers(username)
+    
+    }
+  };
+  xhttp.open("GET", "/users/" + username + "/follow", true);
+  xhttp.send();
+}
+
+
+function unfollow(username) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     var element = document.getElementById("follow-btn")
+     element.setAttribute("class", "label label-info")
+     element.setAttribute("onclick", "follow('"+username+"')")
+     element.innerHTML = "follow " + username
+
+        //reload_list_of_followers(username)
+    
+    }
+  };
+  xhttp.open("GET", "/users/" + username + "/unfollow", true);
+  xhttp.send();
+}
