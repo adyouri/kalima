@@ -281,7 +281,19 @@ class PostsTestCase(BaseTestCase):
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
             response = self.client.get('/posts/2/fav', follow_redirects=True)
-            self.assertIn(b'post &#34;2&#34; was successfully added to your favorites', response.data)
+            self.assertIn(b'"status": 200', response.data)
+
+
+        def test_remove_from_favorites(self):
+            self.client.post(
+                                    '/users/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response = self.client.get('/posts/2/fav', follow_redirects=True)
+            self.assertIn(b'"status": 200', response.data)
+            response2 = self.client.get('/posts/2/unfav', follow_redirects = True)
+            self.assertIn(b'"status": 200', response2.data)
+ 
             
         def test_favorites_page(self):
             self.client.post(

@@ -1,6 +1,3 @@
-# follow/unfollow initial state
-
-
 
 # Add "Ask User" to User Profile
 

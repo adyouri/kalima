@@ -3,10 +3,11 @@
    <br>
    <h2>{{ user.name }} Profile:</h2>
    <hr>
-
    {% if current_user.is_active() %}
    <br>
    <h4>
+       <script>set_follow_button_state('{{user.name}}', '{{current_user.name}}')</script>
+
        <span id="follow-btn" class="label label-info" onclick="follow('{{user.name}}')">
            follow {{ user.name }}
        </span>

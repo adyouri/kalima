@@ -52,8 +52,60 @@ function reload_list_of_fav_users(post_id){
   }
   xhttp.open("GET", "/posts/" + post_id + "/fav_users", true);
   xhttp.send();
-
 };
+
+function set_follow_button_state(user, current_user){
+
+  // if the username is not in the followers list then set button to 'follow'
+  // if the username is in the followers list then set button to 'unfollow'
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+
+     var resault = JSON.parse(xhttp.responseText);
+     var users = resault.followers;
+
+     var element = document.getElementById("follow-btn")
+     
+     
+     if (users.indexOf(current_user) == -1) { // the current user is not following the user (so it's 'follow')
+         element.innerHTML = "follow " + user
+         element.setAttribute("class", "label label-info")
+         element.setAttribute("onclick", "follow('"+user+"')")
+
+     } else {
+         element.innerHTML = "unfollow " + user
+         element.setAttribute("class", "label label-danger")
+         element.setAttribute("onclick", "unfollow('"+user+"')")
+
+     }
+
+    }
+  }
+  xhttp.open("GET", "/users/" + user + "/followers", true);
+  xhttp.send();
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function follow(username) {
   var xhttp = new XMLHttpRequest();
