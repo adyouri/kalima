@@ -89,9 +89,14 @@ def timesince(dt, default="just now"):
 
     return default
 
-
+################## Main Routes ################## 
 @app.route('/')
 def index():
     posts = BlogPost.query.limit(5)
     return render_template('index.html', posts = posts)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
 
