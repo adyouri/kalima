@@ -1,0 +1,21 @@
+{% from "_formhelpers.html" import render_field %}
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit Post:</h1>
+    <form class="form-edit-post" action="" role="form" method="post">
+        <span id = {{ form.process() }}></span>
+        {{ form.csrf_token }}
+        {{ render_field(field=form.title, placeholder="title", class="form-control") }}
+        {{ render_field(field=form.description,
+                        placeholder="Discription", 
+                        class="form-control post-textarea") }}
+
+        {{ render_field(field=form.category, placeholder="Category", class="form-control") }}
+        {{ render_field(field=form.tags, placeholder="Tags (seperated by a space)", class="form-control") }}
+        <button class="btn btn-sm btn-success" type="submit">Edit Post</button>
+    </form>
+    {% if error %}
+    <strong>Error: </strong><div class="alert">{{ error}} </div>
+    {% endif %}
+{% endblock %}
