@@ -9,6 +9,11 @@ class PostForm(Form):
     category = TextField('category', validators = [DataRequired()])
     tags = TextField('tags', validators = [DataRequired()])
 
+class EditPostForm(Form):
+    title = TextField('title', validators = [DataRequired(), Length(max=100)])
+    description = TextAreaField('description', validators = [DataRequired()])
+    category = TextField('category', validators = [DataRequired()])
+    tags = TextField('tags', validators = [DataRequired()])
 
 class CommentForm(Form):
-    content = TextAreaField('content', validators = [DataRequired()])
+    content = TextAreaField('content', validators = [DataRequired(), Length(max=10000)])

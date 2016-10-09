@@ -104,6 +104,14 @@ def register():
     if current_user.is_active():
         return redirect(url_for("posts.home"))
     form = RegisterForm()
+
+    # form.username.errors
+    # form.username(placeholder= 'Enter your username', required = True, value = 'Default Value')
+    # form.username.errors
+
+    # form.username.label
+    # form.password.label
+
     g.message = ""
     if form.validate_on_submit():
         name = form.username.data

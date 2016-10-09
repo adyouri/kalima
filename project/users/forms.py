@@ -3,8 +3,6 @@ from flask_wtf import Form
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
-from flask_login import current_user
-from project import app
 
 class LoginForm(Form):
     username = TextField('Username', validators=[DataRequired()])

@@ -1,14 +1,22 @@
+# Add "Edit Post" page
+    # Edit form in project/posts/forms.py
+    # Add route to project/posts/views.py
+    # Render 'edit.html'
+
+# Tests
+    # test Error 404 page
+    # test Error 500 page
+    # test Edit post
+
 # Handle errors (404, 502, 500 ...)
 
 # Add "Ask User" to User Profile
 
-# Ajaxify follow button and Comments  
+# Ajaxify Comments  
 
 # Add pagination (sqlalchemy orm)
 
 # Add search
-
-# Add "Edit Post" page
 
 # Add some comments and docstrings to the code
 

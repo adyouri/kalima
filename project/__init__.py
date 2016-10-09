@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
@@ -95,8 +95,18 @@ def index():
     posts = BlogPost.query.limit(5)
     return render_template('index.html', posts = posts)
 
+@app.route('/500')
+def error_500():
+    abort(500)
+    #return
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html')
 
