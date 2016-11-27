@@ -54,7 +54,7 @@ random_posts = BlogPost.query.order_by(func.random()).limit(3)
 @app.context_processor
 def categories():
     categories = Category.query.all()
-    return dict(categories = categories,
+    return dict(categories = [category.name for category in categories if category != None],
                 latest_comments = latest_comments,
                 post_by_id = post_by_id,
                 random_posts = random_posts,

@@ -37,8 +37,8 @@
               <ul class="dropdown-menu">
                 {% for category in categories %}
                              <li><a class="nav-link"
-                                href="{{ url_for("posts.posts_by_category", category = category.name) }}">
-                                 {{category.name}}
+                                href="{{ url_for("posts.posts_by_category", category = category) }}">
+                                 {{category}}
                              </a><li> 
                 {% endfor %}
                 </ul>

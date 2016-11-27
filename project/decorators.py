@@ -11,3 +11,14 @@ def login_required(f):
     return wrap
 
 
+def author_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('users.login'))
+    return wrap
+
+
+

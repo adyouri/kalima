@@ -11,6 +11,14 @@ class PostsTestCase(BaseTestCase):
             response = self.client.get('/', content_type='html/text')
             self.assertEqual(response.status_code, 200)
 
+        def test_404(self):
+            response = self.client.get('/page_that_does_not_exist', content_type='html/text')
+            self.assertIn('The page you requested does not exist', response.data)
+
+        def test_500(self):
+            response = self.client.get('/500', content_type='html/text')
+            self.assertIn('Internal server error', response.data)
+
         def test_welcome(self):
             response = self.client.get('/posts/welcome', content_type='html/text')
             self.assertIn("welcome", response.data)
@@ -21,7 +29,7 @@ class PostsTestCase(BaseTestCase):
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
             response = self.client.get('/posts/', follow_redirects=True)
-            post = BlogPost.query.filter_by(id=2).first()
+            post = BlogPost.query.filter_by(id=3).first()
             self.assertTrue(str(post) == "<title From Abd | This is just a test post From Abd >")
             self.assertIn(b'From Abd', response.data)
 
@@ -35,10 +43,6 @@ class PostsTestCase(BaseTestCase):
             self.assertIn(b'By', response.data)
             self.assertIn(b'In', response.data)
 
-
-
-
-
         def test_individual_post(self):
             self.client.post(
                                     '/users/login',
@@ -47,8 +51,8 @@ class PostsTestCase(BaseTestCase):
             response1 = self.client.get('/posts/1', follow_redirects=True)
             response2 = self.client.get('/posts/2', follow_redirects=True)
             self.assertIn(b'This is just a test post', response2.data)
-            self.assertIn(b'admin', response2.data)
-            self.assertIn(b'This is just a test post From Abd', response2.data)
+            self.assertIn(b'abd', response2.data)
+            self.assertIn(b'This is just a test post to test tags', response2.data)
             self.assertIn(b'abd', response2.data)
 
 
@@ -112,7 +116,7 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/not_existing_page_or_user', follow_redirects=False)
-            self.assertEqual(response.status_code, 404)
+            self.assertIn('The page you requested does not exist', response.data)
 
         def test_category_not_found(self):
             self.client.post(
@@ -121,7 +125,11 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/posts/cat/not_existing_category', follow_redirects=False)
-            self.assertEqual(response.status_code, 404)
+            self.assertIn('The page you requested does not exist', response.data)
+
+        def test_category_has_no_posts(self):
+            response = self.client.get("/posts/cat/testing_cat")
+            self.assertIn('No Articles Yet.', response.data)
 
         def test_tag_not_found(self):
             self.client.post(
@@ -130,10 +138,9 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/posts/tag/not_existing_tag', follow_redirects=False)
-            self.assertEqual(response.status_code, 404)
+            self.assertIn('The page you requested does not exist', response.data)
 
         def test_add_post(self):
-
             with self.client:
                 self.client.post(
                         '/users/login',
@@ -151,6 +158,116 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'admin', response.data)
                 self.assertTrue(current_user.name == "admin")
                 self.assertTrue(current_user.is_active())
+
+        def test_post_has_edit_button(self):
+            self.client.post(
+                                    '/users/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+
+            response = self.client.get('/posts/1')
+            self.assertIn('Edit', response.data)
+            response2 = self.client.get('/posts/2')
+            self.assertNotIn('Edit', response2.data)
+
+
+        def test_edit_post(self):
+            with self.client:
+                response1 = self.client.get('/posts/1')
+                self.assertIn(b"Testing Post", response1.data)
+                self.client.post(
+                        '/users/login',
+                        data=dict(username="admin", password="admin"),
+                        follow_redirects = True)
+                response = self.client.post(
+                                        '/posts/1/edit',
+                                        data=dict(title="hello from admin",
+                                            description="This is a description of the admin post",
+                                            category="testing",
+                                            tags = "testing_tag tagged_as_testing"
+                                            ),
+                                        follow_redirects = True)
+
+                self.assertIn(b'hello from admin', response.data)
+                self.assertIn(b'/posts/cat/testing', response.data)
+                self.assertIn(b'/posts/tag/testing_tag', response.data)
+                self.assertIn(b'/posts/tag/tagged_as_testing', response.data)
+                self.assertTrue(current_user.name == "admin")
+                self.assertTrue(current_user.is_active())
+                response2 = self.client.get('/posts/1')
+                self.assertIn(b"This is a description of the admin post", response2.data)
+
+        def test_delete_post(self):
+            with self.client:
+                self.client.post(
+                        '/users/login',
+                        data=dict(username="admin", password="admin"),
+                        follow_redirects = True)
+                response = self.client.post(
+                                 '/posts/new',
+                                 data=dict(title="to be deleted",
+                                     description="This post will be deleted",
+                                     category="deleting",
+                                     tags="deleting1 deleting2 deleting3",
+                                     ),
+                                 follow_redirects = True)
+                post = BlogPost.query.filter(BlogPost.title=='to be deleted').first()
+                self.assertTrue(post.description == 'This post will be deleted')
+                self.assertTrue(post.category.name == 'deleting')
+                response = self.client.get('/posts/cat/deleting')
+                self.assertIn(b'to be deleted', response.data)
+
+                # delete it
+                self.client.get('/posts/{}/delete'.format(post.id))
+                post = BlogPost.query.filter_by(title='to be deleted').first()
+                self.assertFalse(post)
+                response = self.client.get('/posts/cat/deleting')
+                self.assertNotIn(b'to be deleted', response.data)
+
+
+        def test_user_cannot_delete_other_posts(self):
+            with self.client:
+                self.client.post(
+                        '/users/login',
+                        data=dict(username="admin", password="admin"),
+                        follow_redirects = True)
+                response = self.client.post(
+                                 '/posts/new',
+                                 data=dict(title="to be deleted",
+                                     description="This post will be deleted",
+                                     category="deleting",
+                                     tags="deleting1 deleting2 deleting3",
+                                     ),
+                                 follow_redirects = True)
+                post = BlogPost.query.filter(BlogPost.title=='to be deleted').first()
+                self.assertTrue(post.description == 'This post will be deleted')
+                self.assertTrue(post.category.name == 'deleting')
+                response = self.client.get('/posts/cat/deleting')
+                self.assertIn(b'to be deleted', response.data)
+
+                # log out
+
+                self.client.get('/users/logout', follow_redirects=True)
+
+                # login another user
+                self.client.post(
+                        '/users/login',
+                        data=dict(username="abd", password="abd"),
+                        follow_redirects = True)
+
+                # delete it
+                response1 = self.client.get('/posts/{}/delete'.format(post.id))
+                assertIn(b'You cannot delete this post', response1.data)
+                post = BlogPost.query.filter_by(title='to be deleted').first()
+                self.assertTrue(post)
+                response2 = self.client.get('/posts/cat/deleting')
+                self.assertIn(b'to be deleted', response2.data)
+
+
+                
+
+
+
 
         def test_post_date(self):
 
@@ -211,7 +328,6 @@ class PostsTestCase(BaseTestCase):
 
 
         def test_add_category(self):
-
             with self.client:
                 self.client.post(
                         '/users/login',
@@ -237,7 +353,6 @@ class PostsTestCase(BaseTestCase):
                         '/users/login',
                         data=dict(username="abd", password="abd"),
                         follow_redirects = True)
-
                 self.client.post(
                                         '/posts/new',
                                         data=dict(title="hello",
@@ -282,6 +397,18 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
             response = self.client.get('/posts/2/fav', follow_redirects=True)
             self.assertIn(b'"status": 200', response.data)
+
+        def test_user_can_only_edit_his_posts(self):
+            self.client.post(
+                                    '/users/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+            response1 = self.client.get('/posts/1/edit', follow_redirects=True)
+            response2 = self.client.get('/posts/3/edit', follow_redirects=True)
+            self.assertIn(b'Edit Post:', response1.data)
+            self.assertNotIn(b'Edit Post:', response2.data)
+            self.assertIn(b'Post is not yours', response2.data)
+
 
 
         def test_remove_from_favorites(self):

@@ -1,8 +1,24 @@
 {% block post_base %}
 
 <div class="post-base">
+<h2 class="post-title"><a href="{{ url_for("posts.post_by_id", id = post.id) }}">{{ post.title }}</a></h2>
+    {% if current_user.is_active() and current_user == post.author %}
+    <span class="label label-success">
+        <a href="{{ url_for("posts.edit", id=post.id) }}">
+                <span class="glyphicon glyphicon-pencil"></span>
+                        Edit 
+        </a>
+    </span>
+    {% endif %}
 
-<h2 class="post-title"><a href="{{ url_for("posts.post_by_id", id = post.id) }}">{{ post.title }}</h2></a>
+    {% if current_user.is_active() and current_user == post.author %}
+    <span class="label label-danger">
+        <a href="{{ url_for("posts.delete", id=post.id) }}">
+                <span class="glyphicon glyphicon-trash"></span>
+                        Delete 
+        </a>
+    </span>
+    {% endif %}
 
     {% if post.created_date %}
     <span title="{{ post.created_date.date() }}">

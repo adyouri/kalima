@@ -1,14 +1,9 @@
-# Add "Edit Post" page
-    # Edit form in project/posts/forms.py
-    # Add route to project/posts/views.py
-    # Render 'edit.html'
-
 # Tests
-    # test Error 404 page
-    # test Error 500 page
-    # test Edit post
+    # Add 'Delete' button
 
-# Handle errors (404, 502, 500 ...)
+# Styling
+
+# Delete post and its category/tags
 
 # Add "Ask User" to User Profile
 

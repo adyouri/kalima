@@ -49,20 +49,26 @@ class Tag(db.Model):
 class BlogPost(db.Model):
     __tablename__ = "posts"
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
-    description = db.Column(db.String, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, ForeignKey('users.id'))
     category_id = db.Column(db.Integer, ForeignKey('categories.id'))
     comments = relationship("Comment", backref="post") # post.comments
     created_date = db.Column(db.DateTime)
     tags = db.relationship('Tag', secondary = posts_tags, backref = db.backref("posts", lazy = "dynamic"))
     fav_users = db.relationship('User', secondary = favs, backref = db.backref("fav_posts", lazy = "dynamic"))
-
+    """
     def __init__(self, title, description, author_id, category_id, created_date = None):
         self.title = title
         self.description = description
         self.author_id = author_id
         self.category_id = category_id
+        self.created_date = datetime.utcnow()
+     """
+    def __init__(self, title, description, author_id, created_date = None):
+        self.title = title
+        self.description = description
+        self.author_id = author_id
         self.created_date = datetime.utcnow()
 
     def __repr__(self):
@@ -73,7 +79,7 @@ class BlogPost(db.Model):
 class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String, nullable=False)
+    content = db.Column(db.Text, nullable=False)
     post_id = db.Column(db.Integer, ForeignKey('posts.id'))
     author_id = db.Column(db.Integer, ForeignKey('users.id'))
     created_date = db.Column(db.DateTime)
@@ -93,7 +99,7 @@ class Comment(db.Model):
 class Category(db.Model):
     __tablename__ = "categories"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(25))
     posts = relationship("BlogPost", backref="category")
 
 
@@ -109,9 +115,9 @@ class Category(db.Model):
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(25), nullable=False)
+    email = db.Column(db.String(25), nullable=False)
+    password = db.Column(db.String(25), nullable=False)
     private_favorites = db.Column(db.Boolean, default = True)
     posts = relationship("BlogPost", backref="author")
     comments = relationship("Comment", backref="author") # comment.author.(id, name, email...)

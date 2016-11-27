@@ -16,7 +16,23 @@ class UsersTestCase(BaseTestCase):
                                         follow_redirects = True)
 
             response = self.client.get('/users/not_existing_user', follow_redirects=False)
-            self.assertEqual(response.status_code, 404)
+            self.assertIn('The page you requested does not exist', response.data)
+
+        def test_fav_posts_user_not_found(self):
+            response = self.client.get('/users/not_existing_user/favorites', follow_redirects=False)
+            self.assertIn('The page you requested does not exist', response.data)
+
+
+        def test_no_favorites(self):
+            self.client.post(
+                                    '/users/login',
+                                    data=dict(
+                                        username="abd",
+                                        password="abd"),
+                                        follow_redirects = True)
+            response = self.client.get('/users/abd/favorites', follow_redirects=False)
+            self.assertIn('No Favorites Yet.', response.data)
+
 
         def test_post_by_author(self):
             self.client.post(
