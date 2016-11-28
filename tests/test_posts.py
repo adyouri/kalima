@@ -224,6 +224,17 @@ class PostsTestCase(BaseTestCase):
                 response = self.client.get('/posts/cat/deleting')
                 self.assertNotIn(b'to be deleted', response.data)
 
+        def test_post_has_delete_button(self):
+            self.client.post(
+                                    '/users/login',
+                                    data=dict(username="admin", password="admin"),
+                                    follow_redirects = True)
+
+            response = self.client.get('/posts/1', follow_redirects=True)
+            self.assertIn('Delete', response.data)
+            response2 = self.client.get('/posts/2', follow_redirects=True)
+            self.assertNotIn('Delete', response2.data)
+
 
         def test_user_cannot_delete_other_posts(self):
             with self.client:
@@ -256,8 +267,8 @@ class PostsTestCase(BaseTestCase):
                         follow_redirects = True)
 
                 # delete it
-                response1 = self.client.get('/posts/{}/delete'.format(post.id))
-                assertIn(b'You cannot delete this post', response1.data)
+                response1 = self.client.get('/posts/{}/delete'.format(post.id), follow_redirects=True)
+                self.assertIn(b'You cannot delete this post', response1.data)
                 post = BlogPost.query.filter_by(title='to be deleted').first()
                 self.assertTrue(post)
                 response2 = self.client.get('/posts/cat/deleting')
