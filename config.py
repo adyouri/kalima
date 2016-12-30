@@ -1,5 +1,6 @@
 import os
 class BaseConfig(object):
+    PER_PAGE = 50
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL'] #'sqlite:///posts.db'
     DEBUG = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True

@@ -7,10 +7,6 @@ from forms import LoginForm, RegisterForm, SettingsForm
 from project import bcrypt, LoginManager, db
 from flask_login import login_user, logout_user, login_required, current_user
 
-
-
-
-
 def change_user_settings(email, current_password, new_password, private_favorites):
     message = None
     if current_user.email != email:
@@ -170,10 +166,6 @@ def profile(username):
                            user = user,
                            message = message)
 
-
-
-
-
 @users_blueprint.route('/<string:username>/followers')
 def followers(username):
     user = User.query.filter_by(name = username).first() 
@@ -181,13 +173,8 @@ def followers(username):
 
     return jsonify(**followers)
 
-
 @users_blueprint.route('/<string:username>/following')
 def following(username):
     user = User.query.filter_by(name = username).first() 
     following = {"following": [user.name for user in user.following.all()]}
     return jsonify(**following)
-
-
-
-

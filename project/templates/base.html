@@ -58,8 +58,6 @@
                        <span class="glyphicon glyphicon-heart"> </span> My Favorites
                        </a> 
                 </li>
-
-
                  <li>
                        <a href="{{ url_for("users.logout") }}">Log out</a>
                  </li>
@@ -78,14 +76,12 @@
 
    <hr>
     {% block content %}
-
     {% endblock %} 
 
         <div style="margin-bottom: 80px"></div>
 
     </div>
     <hr>
-    
     <div class="container">
         <h4>Latest comments</h4>
 
@@ -101,13 +97,8 @@
         {% endfor %}
 
     <div style="margin-bottom: 80px"></div>
-
     </div>
-
-
-
     <hr>
-    
     <div class="container">
         <h4>Random Posts</h4>
 

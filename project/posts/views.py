@@ -9,7 +9,7 @@ from  flask_login import current_user, login_required
 
 from . import posts_blueprint
 from forms import PostForm, CommentForm, EditPostForm
-from project import db
+from project import db, app
 
 from project.decorators import author_required
 
@@ -231,4 +231,12 @@ def delete(id):
     else:
         flash('You cannot delete this post')
         return redirect(url_for("posts.post_by_id", id=post.id))
+
+
+@posts_blueprint.route('/page/')
+@posts_blueprint.route('/page/<int:page>/')
+def paginate(page = 1):
+    pagination = BlogPost.query.paginate(page=page, per_page=app.config['PER_PAGE'])
+    return render_template('pages.html', pagination=pagination)
+
 

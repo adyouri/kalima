@@ -1,0 +1,17 @@
+{% from "_helpers.html" import render_pagination %}
+{% extends "base.html" %}
+
+{% block content %}
+   <br>
+   {% for post in pagination.items %}
+   {% include "post_base.html" %}
+   <br>
+   <br>
+   <br>
+   
+  
+   {% endfor %} 
+   <hr>
+   {{ render_pagination(pagination, 'posts.paginate') }}
+
+{% endblock %}

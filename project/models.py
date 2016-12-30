@@ -34,9 +34,6 @@ follows = db.Table(
         )
 
 
-
-
-
 class Tag(db.Model):
     __tablename__ = "tags"
     id = db.Column(db.Integer, primary_key=True)
@@ -121,6 +118,13 @@ class User(db.Model):
     private_favorites = db.Column(db.Boolean, default = True)
     posts = relationship("BlogPost", backref="author")
     comments = relationship("Comment", backref="author") # comment.author.(id, name, email...)
+
+
+    # questions_to = 
+    # questions_from = 
+
+
+
     following = relationship("User",
                              secondary=follows,
                              primaryjoin=(follows.c.follower_id == id),
@@ -166,8 +170,38 @@ class User(db.Model):
     def __repr__(self):
         return '<name {} >'.format(self.name)
 
+# User to User questions, Each user can submit a question to another user
+# A user can only access and answer questions directed to them
+# User can question other users
 
+asker_asked = db.Table(
+        "asker_asked",
+        db.Column('question_id', db.Integer, db.ForeignKey('questions.id'), nullable=False),
+        db.Column('asker_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+        db.Column('asked_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+        )
+# 1 | 2 | 1 ===> user1 asks user2 the question1
+# question1.asker >> user1
+# question2.asked >> user2
+# question.answer (easy)
 
+class Question(db.Model):
+    __tablename__ = "questions"
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(200))
+    #asker = db.relationship
+    """
+    following = relationship("User",
+                             secondary=follows,
+                             primaryjoin=(follows.c.follower_id == id),
+                             secondaryjoin=(follows.c.followed_id == id),
+                             backref=db.backref("followers",
+                                                 lazy= "dynamic"),
+                             lazy = "dynamic")
+    """
+    asked = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    answer = db.Column(db.String(200))
 
-
+    def __init__(self, content):
+        self.content = content
 

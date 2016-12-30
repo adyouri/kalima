@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 from datetime import datetime
 from flask import Flask, render_template, abort
 from flask_bcrypt import Bcrypt
@@ -60,15 +63,20 @@ def categories():
                 random_posts = random_posts,
                 )
 
+################## Main Routes ################## 
+@app.route('/')
+def index():
+    posts = BlogPost.query.limit(5)
+    return render_template('index.html', posts = posts)
+
+@app.route('/500')
+def error_500():
+    abort(500)
+    #return
 
 
 @app.template_filter()
 def timesince(dt, default="just now"):
-    """
-    Returns string representing "time since" e.g.
-    3 days ago, 5 hours ago etc.
-    """
-
     now = datetime.utcnow()
     diff = now - dt
     
@@ -88,18 +96,6 @@ def timesince(dt, default="just now"):
             return "%d %s ago" % (period, singular if period == 1 else plural)
 
     return default
-
-################## Main Routes ################## 
-@app.route('/')
-def index():
-    posts = BlogPost.query.limit(5)
-    return render_template('index.html', posts = posts)
-
-@app.route('/500')
-def error_500():
-    abort(500)
-    #return
-
 
 
 @app.errorhandler(404)

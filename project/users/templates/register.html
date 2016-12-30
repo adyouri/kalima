@@ -1,4 +1,4 @@
-{% from "_formhelpers.html" import render_field %}
+{% from "_helpers.html" import render_field %}
 
 
 {% extends "base.html" %}
@@ -22,6 +22,6 @@
         <button class="btn btn-sm btn-success" type="submit">Sign Up</button>
     </form>
     {% if error %}
-    <strong>Error: </strong><div class="alert">{{ error}} </div>
+    <strong>Error: </strong><div class="alert">{{ error }} </div>
     {% endif %}
 {% endblock %}

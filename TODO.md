@@ -1,15 +1,21 @@
+
+
+
+# Add "Ask User" to User Profile
+    - Create Table for Question
+    - 
+
+# Add pagination (sqlalchemy orm)
+
 # Tests
-    # Add 'Delete' button
+
+# Use https://github.com/toopay/bootstrap-markdown for adding a new post
 
 # Styling
 
-# Delete post and its category/tags
+# Use Flask-Principal to manage permissions
 
-# Add "Ask User" to User Profile
-
-# Ajaxify Comments  
-
-# Add pagination (sqlalchemy orm)
+# Ajaxify Comments
 
 # Add search
 

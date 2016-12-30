@@ -1,10 +1,10 @@
-{% from "_formhelpers.html" import render_field %}
+{% from "_helpers.html" import render_field %}
 
 {% extends "base.html" %}
 {% block content %}
 <h1>Please login</h1>
     <form class="form-signin" action="" role="form" method="post">
-        {{ form.csrf_token }}
+        {{ form.hidden_tag }}
 
 
         {{ render_field(field=form.username, placeholder="username", class="form-control") }}
