@@ -8,7 +8,7 @@ from project.models import BlogPost, User, Category, Comment, Tag
 from  flask_login import current_user, login_required
 
 from . import posts_blueprint
-from forms import PostForm, CommentForm, EditPostForm
+from project.posts.forms import PostForm, CommentForm, EditPostForm
 from project import db, app
 
 from project.decorators import author_required

@@ -1,5 +1,11 @@
 
+# Dynamically create the app instead of relying on APP_SETTINGS
+    ## export APP_SETTINGS='config.DevelopmentConfig' Does not use sqlite testing
+    ## export APP_SETTINGS='config.TestConfig' uses SQLite for both
 
+
+
+py -m unittest tests.test_users.UsersTestCase
 
 # Add "Ask User" to User Profile
     - Create Table for Question

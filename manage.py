@@ -29,7 +29,7 @@ def cov():
     unittest.TextTestRunner(verbosity=2).run(tests)
     cov.stop()
     cov.save()
-    print 'Coverage Summary:'
+    print('Coverage Summary:')
     cov.report()
     basedir = os.path.abspath(os.path.dirname(__file__))
     covedir = os.path.join(basedir, 'coverage')

@@ -17,13 +17,13 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
 db = SQLAlchemy(app)
-from posts import posts_blueprint
-from users import users_blueprint
+from project.posts import posts_blueprint
+from project.users import users_blueprint
 
 app.register_blueprint(posts_blueprint)
 app.register_blueprint(users_blueprint)
 
-from models import User, Category, Comment, BlogPost
+from project.models import User, Category, Comment, BlogPost
 
 login_manager.login_view = "users.login"
 

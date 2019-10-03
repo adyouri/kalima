@@ -9,9 +9,11 @@ class BaseTestCase(TestCase):
 
     def create_app(self):
         app.config.from_object('config.TestConfig')
+        print(app.config['SQLALCHEMY_DATABASE_URI'])
         return app
 
     def setUp(self):
+        #self.create_app() # Create the app with TestConfig
         db.create_all()
         admin = User("admin", "admin@g.co", "admin")
         admin.private_favorites = True

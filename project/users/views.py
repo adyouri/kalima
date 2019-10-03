@@ -3,7 +3,7 @@ from flask import (flash, redirect, url_for,
                    render_template, abort,
                    request, g, jsonify)
 from project.models import User, BlogPost
-from forms import LoginForm, RegisterForm, SettingsForm
+from project.users.forms import LoginForm, RegisterForm, SettingsForm
 from project import bcrypt, LoginManager, db
 from flask_login import login_user, logout_user, login_required, current_user
 

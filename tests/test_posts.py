@@ -1,8 +1,9 @@
 import unittest
 import datetime
 from flask_login import current_user
-from base import BaseTestCase
+from tests.base import BaseTestCase
 from project.models import Comment, BlogPost, Category
+from flask import current_app
 
 
 
@@ -13,15 +14,15 @@ class PostsTestCase(BaseTestCase):
 
         def test_404(self):
             response = self.client.get('/page_that_does_not_exist', content_type='html/text')
-            self.assertIn('The page you requested does not exist', response.data)
+            self.assertIn(b'The page you requested does not exist', response.data)
 
         def test_500(self):
             response = self.client.get('/500', content_type='html/text')
-            self.assertIn('Internal server error', response.data)
+            self.assertIn(b'Internal server error', response.data)
 
         def test_welcome(self):
             response = self.client.get('/posts/welcome', content_type='html/text')
-            self.assertIn("welcome", response.data)
+            self.assertIn(b"welcome", response.data)
 
         def test_post_show_up(self):
             self.client.post(
@@ -116,7 +117,7 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/not_existing_page_or_user', follow_redirects=False)
-            self.assertIn('The page you requested does not exist', response.data)
+            self.assertIn(b'The page you requested does not exist', response.data)
 
         def test_category_not_found(self):
             self.client.post(
@@ -125,11 +126,11 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/posts/cat/not_existing_category', follow_redirects=False)
-            self.assertIn('The page you requested does not exist', response.data)
+            self.assertIn(b'The page you requested does not exist', response.data)
 
         def test_category_has_no_posts(self):
             response = self.client.get("/posts/cat/testing_cat")
-            self.assertIn('No Articles Yet.', response.data)
+            self.assertIn(b'No Articles Yet.', response.data)
 
         def test_tag_not_found(self):
             self.client.post(
@@ -138,7 +139,7 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/posts/tag/not_existing_tag', follow_redirects=False)
-            self.assertIn('The page you requested does not exist', response.data)
+            self.assertIn(b'The page you requested does not exist', response.data)
 
         def test_add_post(self):
             with self.client:
@@ -166,9 +167,9 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/posts/1')
-            self.assertIn('Edit', response.data)
+            self.assertIn(b'Edit', response.data)
             response2 = self.client.get('/posts/2')
-            self.assertNotIn('Edit', response2.data)
+            self.assertNotIn(b'Edit', response2.data)
 
 
         def test_edit_post(self):
@@ -231,9 +232,9 @@ class PostsTestCase(BaseTestCase):
                                     follow_redirects = True)
 
             response = self.client.get('/posts/1', follow_redirects=True)
-            self.assertIn('Delete', response.data)
+            self.assertIn(b'Delete', response.data)
             response2 = self.client.get('/posts/2', follow_redirects=True)
-            self.assertNotIn('Delete', response2.data)
+            self.assertNotIn(b'Delete', response2.data)
 
 
         def test_user_cannot_delete_other_posts(self):
@@ -298,7 +299,8 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'hello', response.data)
                 self.assertIn(b'/posts/cat/testing', response.data)
                 self.assertIn(b'admin', response.data)
-                self.assertIn(str(datetime.datetime.utcnow().date()), response.data)
+                self.assertIn(str(datetime.datetime.utcnow().date()).encode(),
+                              response.data)
                 self.assertIn(b'just now', response.data)
                 self.assertTrue(current_user.name == "admin")
                 self.assertTrue(current_user.is_active())
