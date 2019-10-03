@@ -1,14 +1,15 @@
 import unittest
 from flask_testing import TestCase
 from flask_login import current_user
-from project import app, db
+from project import create_app, db
 from project.models import BlogPost, User, Category, Comment, Tag
 
 class BaseTestCase(TestCase):
     """The Base Test Case"""
 
     def create_app(self):
-        app.config.from_object('config.TestConfig')
+        app = create_app(testing=True)
+        #app.config.from_object('config.TestConfig')
         print(app.config['SQLALCHEMY_DATABASE_URI'])
         return app
 

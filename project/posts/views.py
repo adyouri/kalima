@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import (flash, redirect, session,
                    url_for, render_template,
-                   abort, request, jsonify)
+                   abort, request, jsonify, current_app)
 
 from project.models import BlogPost, User, Category, Comment, Tag
 
@@ -9,7 +9,7 @@ from  flask_login import current_user, login_required
 
 from . import posts_blueprint
 from project.posts.forms import PostForm, CommentForm, EditPostForm
-from project import db, app
+from project import db
 
 from project.decorators import author_required
 
@@ -236,7 +236,8 @@ def delete(id):
 @posts_blueprint.route('/page/')
 @posts_blueprint.route('/page/<int:page>/')
 def paginate(page = 1):
-    pagination = BlogPost.query.paginate(page=page, per_page=app.config['PER_PAGE'])
+    pagination = BlogPost.query.paginate(page=page,
+                    per_page=current_app.config['PER_PAGE'])
     return render_template('pages.html', pagination=pagination)
 
 
