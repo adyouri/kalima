@@ -16,11 +16,11 @@ class UsersTestCase(BaseTestCase):
                                         follow_redirects = True)
 
             response = self.client.get('/users/not_existing_user', follow_redirects=False)
-            self.assertIn('The page you requested does not exist', response.data)
+            self.assertIn(b'The page you requested does not exist', response.data)
 
         def test_fav_posts_user_not_found(self):
             response = self.client.get('/users/not_existing_user/favorites', follow_redirects=False)
-            self.assertIn('The page you requested does not exist', response.data)
+            self.assertIn(b'The page you requested does not exist', response.data)
 
 
         def test_no_favorites(self):
@@ -31,7 +31,7 @@ class UsersTestCase(BaseTestCase):
                                         password="abd"),
                                         follow_redirects = True)
             response = self.client.get('/users/abd/favorites', follow_redirects=False)
-            self.assertIn('No Favorites Yet.', response.data)
+            self.assertIn(b'No Favorites Yet.', response.data)
 
 
         def test_post_by_author(self):
@@ -233,7 +233,7 @@ class UsersTestCase(BaseTestCase):
                         )
             self.client.get('/users/abd/follow')
             response = self.client.get('/users/admin/following')
-            self.assertIn('abd', response.data)
+            self.assertIn(b'abd', response.data)
                         
         def test_following_list_after_unfollow(self):
             self.client.post(
@@ -243,10 +243,10 @@ class UsersTestCase(BaseTestCase):
                         )
             self.client.get('/users/abd/follow')
             response = self.client.get('/users/admin/following')
-            self.assertIn('abd', response.data)
+            self.assertIn(b'abd', response.data)
             self.client.get('/users/abd/unfollow')
             response = self.client.get('/users/admin/following')
-            self.assertNotIn('abd', response.data)
+            self.assertNotIn(b'abd', response.data)
  
         def test_followers_list(self):
             self.client.post(
@@ -256,7 +256,7 @@ class UsersTestCase(BaseTestCase):
                         )
             self.client.get('/users/abd/follow')
             response = self.client.get('/users/abd/followers')
-            self.assertIn('admin', response.data)
+            self.assertIn(b'admin', response.data)
 
         def test_user_profile(self):
             self.client.post(
@@ -266,8 +266,8 @@ class UsersTestCase(BaseTestCase):
                         )
             response1 = self.client.get('/users/abd/profile')
             response2 = self.client.get('/users/admin/profile')
-            self.assertIn('From Abd', response1.data)
-            self.assertIn('Testing Post', response2.data)
+            self.assertIn(b'From Abd', response1.data)
+            self.assertIn(b'Testing Post', response2.data)
 
         def test_user_profile_has_no_posts_yet(self):
             with self.client:
@@ -279,7 +279,7 @@ class UsersTestCase(BaseTestCase):
                                     confirm="admino")
                         )
             response = self.client.get('/users/admino/profile')
-            self.assertIn('No Posts Yet', response.data)
+            self.assertIn(b'No Posts Yet', response.data)
 
 
 

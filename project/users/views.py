@@ -1,7 +1,7 @@
 from . import users_blueprint
 from flask import (flash, redirect, url_for,
                    render_template, abort,
-                   request, g, jsonify)
+                   request, g, jsonify, current_app)
 from project.models import User, BlogPost
 from project.users.forms import LoginForm, RegisterForm, SettingsForm
 from project import bcrypt, LoginManager, db
@@ -121,6 +121,10 @@ def register():
 @users_blueprint.route('/settings', methods=['POST', 'GET'])
 @login_required
 def settings():
+    print(current_user)
+    print('LOGIN_DISABLED: ', current_app.login_manager._login_disabled)
+    print('authenticated: ', current_user.is_authenticated())
+    print(current_app.config)
     message = None
     form = SettingsForm()
     form.private_favs.default = current_user.private_favorites

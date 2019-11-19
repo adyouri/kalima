@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
+import os
+import re
 from datetime import datetime
+
 from flask import Flask, render_template, abort
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-import os
-import re
-
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
 
@@ -16,12 +16,21 @@ login_manager = LoginManager()
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
+from project.models import User, Category, Comment, BlogPost
+
 def create_app(testing=False):
     app = Flask(__name__)
-    app.config.from_object(os.environ['APP_SETTINGS'])
     if testing:
         app.config.from_object('config.TestConfig')
+    else:
+        app.config.from_object(os.environ['APP_SETTINGS'])
+
     login_manager.init_app(app)
+    login_manager.login_view = "users.login"
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.filter_by(id = int(user_id)).first()
+
     bcrypt.init_app(app)
     db.init_app(app)
 
@@ -31,7 +40,6 @@ def create_app(testing=False):
     app.register_blueprint(posts_blueprint)
     app.register_blueprint(users_blueprint)
 
-    from project.models import User, Category, Comment, BlogPost
     @app.route('/')
     def index():
         posts = BlogPost.query.limit(5)
@@ -40,14 +48,12 @@ def create_app(testing=False):
     @app.route('/500')
     def error_500():
         abort(500)
-        #return
 
 
     @app.template_filter()
     def timesince(dt, default="just now"):
         now = datetime.utcnow()
         diff = now - dt
-        
         periods = (
             (diff.days / 365, "year", "years"),
             (diff.days / 30, "month", "months"),
@@ -59,7 +65,6 @@ def create_app(testing=False):
         )
 
         for period, singular, plural in periods:
-            
             if period:
                 return "%d %s ago" % (period, singular if period == 1 else plural)
 
@@ -124,17 +129,10 @@ def create_app(testing=False):
 #app.register_blueprint(posts_blueprint)
 #app.register_blueprint(users_blueprint)
 
-app = create_app()
+
+# app = create_app()
 
 
-from project.models import User, Category, Comment, BlogPost
-
-login_manager.login_view = "users.login"
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.filter_by(id = int(user_id)).first()
 
 
 ################## Main Routes ################## 

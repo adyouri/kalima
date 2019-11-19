@@ -9,8 +9,6 @@ class BaseTestCase(TestCase):
 
     def create_app(self):
         app = create_app(testing=True)
-        #app.config.from_object('config.TestConfig')
-        print(app.config['SQLALCHEMY_DATABASE_URI'])
         return app
 
     def setUp(self):
