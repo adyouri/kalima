@@ -9,7 +9,6 @@ from flask import Flask, render_template, abort
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql.expression import func
 
 
 login_manager = LoginManager()
@@ -27,7 +26,6 @@ def create_app(testing=False):
         app.config.from_object(os.environ['APP_SETTINGS'])
 
     login_manager.init_app(app)
-
     bcrypt.init_app(app)
     db.init_app(app)
 
@@ -39,38 +37,21 @@ def create_app(testing=False):
     app.register_blueprint(posts_blueprint)
     app.register_blueprint(users_blueprint)
 
-
     from project.filters import timesince, slugify
     app.jinja_env.filters['timesince'] = timesince
     app.jinja_env.filters['slugify'] = slugify
 
-    def latest_comments():
-        comments_list = []
-        with app.app_context():
-            comments = Comment.query.order_by(Comment.created_date.desc()) # latest added comments
-        for comment in comments:
-            if comment.created_date:
-                comments_list.append(comment)
-            else:
-                pass
-        return comments_list[:5] # only the first five recently added comments
 
-    def post_by_id(post_id):
-        with app.app_context():
-            post = BlogPost.query.filter_by(id = post_id).first()
-        return post
+    from project.utils import latest_comments, post_by_id, random_posts
 
-
-    with app.app_context():
-        random_posts = BlogPost.query.order_by(func.random()).limit(3)
 
     @app.context_processor
     def categories():
         categories = Category.query.all()
         return dict(categories = [category.name for category in categories if category != None],
-                    latest_comments = latest_comments,
+                    latest_comments = latest_comments(),
                     post_by_id = post_by_id,
-                    random_posts = random_posts,
+                    random_posts = random_posts(),
                     )
 
     @app.errorhandler(404)

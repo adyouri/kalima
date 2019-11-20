@@ -41,8 +41,7 @@ class PostsTestCase(BaseTestCase):
                                     data=dict(username="admin", password="admin"),
                                     follow_redirects = True)
             response = self.client.get('/posts/', follow_redirects=True)
-            self.assertIn(b'By', response.data)
-            self.assertIn(b'In', response.data)
+            self.assertIn(b'in <a href="/posts/1#1">', response.data)
 
         def test_individual_post(self):
             self.client.post(
