@@ -1,10 +1,8 @@
+# Clean create_app() by moving functions out
 
+# Format the code using Black
 
-# py -m unittest tests.test_users.UsersTestCase
-
-# fix failing user tests (private_favorites issue)
-
-# Clean create_app() by creating a main blueprint
+# Code coverage
 
 # Add "Ask User" to User Profile
     - Create Table for Question
