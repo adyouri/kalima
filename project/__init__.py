@@ -27,10 +27,6 @@ def create_app(testing=False):
         app.config.from_object(os.environ['APP_SETTINGS'])
 
     login_manager.init_app(app)
-    login_manager.login_view = "users.login"
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.filter_by(id = int(user_id)).first()
 
     bcrypt.init_app(app)
     db.init_app(app)
@@ -86,6 +82,11 @@ def create_app(testing=False):
         return render_template('500.html')
 
     return app
+
+login_manager.login_view = "users.login"
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter_by(id = int(user_id)).first()
 
 #   @app.route('/')
 #   def index():
