@@ -7,17 +7,12 @@
 
 # Remove unnecessary packages
 # Upgrade:
- Flask-Bcrypt==0.6.0
- Flask-Gravatar==0.4.2
- Flask-Login==0.2.11
- Flask-Mail==0.9.1
- Flask-Migrate==1.2.0
- Flask-Moment==0.5.1
- Flask-Script==2.0.5
- Flask-Testing==0.4.2
- Flask-Uploads==0.2.1
- Flask-WTF==0.10.2
- gunicorn==19.0.0
+Flask-Bcrypt
+Flask-Login
+Flask-Migrate
+Flask-Testing
+Flask-WTF
+
 
 
 # Remove unnecessary files (manage.py, run.py...)
