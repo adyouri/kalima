@@ -16,6 +16,7 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 from project.models import User, Category, Comment, BlogPost
+from project.cli import run_tests_command, coverage_command
 
 
 def create_app(testing=False):
@@ -41,12 +42,11 @@ def create_app(testing=False):
     app.jinja_env.filters['timesince'] = timesince
     app.jinja_env.filters['slugify'] = slugify
 
-
     from project.utils import latest_comments, post_by_id, random_posts
 
 
     @app.context_processor
-    def categories():
+    def inject_data():
         categories = Category.query.all()
         return dict(categories = [category.name for category in categories if category != None],
                     latest_comments = latest_comments(),
@@ -61,6 +61,9 @@ def create_app(testing=False):
     @app.errorhandler(500)
     def page_not_found(e):
         return render_template('500.html')
+
+    app.cli.add_command(run_tests_command)
+    app.cli.add_command(coverage_command)
 
     return app
 

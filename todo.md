@@ -1,8 +1,30 @@
-# Clean create_app() by moving functions out
 
-# Format the code using Black
+# use the Flask CLI instead of flask-script
+
+
 
 # Code coverage
+
+# Remove unnecessary packages
+# Upgrade:
+ Flask-Bcrypt==0.6.0
+ Flask-Gravatar==0.4.2
+ Flask-Login==0.2.11
+ Flask-Mail==0.9.1
+ Flask-Migrate==1.2.0
+ Flask-Moment==0.5.1
+ Flask-Script==2.0.5
+ Flask-Testing==0.4.2
+ Flask-Uploads==0.2.1
+ Flask-WTF==0.10.2
+ gunicorn==19.0.0
+
+
+# Remove unnecessary files (manage.py, run.py...)
+
+
+# Format the code using Black and flake8
+-----
 
 # Add "Ask User" to User Profile
     - Create Table for Question
