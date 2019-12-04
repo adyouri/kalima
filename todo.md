@@ -1,22 +1,12 @@
-
-# use the Flask CLI instead of flask-script
-
-
+# Upgrade:
+Flask-Login
+Flask-Testing
+Flask-WTF
+Flask-Migrate
 
 # Code coverage
 
-# Remove unnecessary packages
-# Upgrade:
-Flask-Bcrypt
-Flask-Login
-Flask-Migrate
-Flask-Testing
-Flask-WTF
-
-
-
 # Remove unnecessary files (manage.py, run.py...)
-
 
 # Format the code using Black and flake8
 -----
