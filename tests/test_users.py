@@ -1,7 +1,10 @@
 import unittest
+
+import bcrypt
 from flask_login import current_user
+
 from tests.base import BaseTestCase
-from project import bcrypt, db
+from project import db
 from project.models import User
 
 
@@ -150,8 +153,8 @@ class UsersTestCase(BaseTestCase):
                 self.assertIn(b'This field is required.', response.data)
         def test_check_password(self):
             user = User.query.filter_by(name="admin").first()
-            self.assertTrue(bcrypt.check_password_hash(user.password, "admin"))
-            self.assertFalse(bcrypt.check_password_hash(user.password, "incorrect"))
+            self.assertTrue(bcrypt.checkpw(b"admin", user.password))
+            self.assertFalse(bcrypt.checkpw(b"incorrect", user.password))
 
         def test_redirecting_on_login_if_user_is_active(self):
             with self.client:
@@ -200,8 +203,8 @@ class UsersTestCase(BaseTestCase):
                                             private_favs=False),
                                             follow_redirects = True)
                 self.assertIn(b'You have successfully changed your settings', response.data)
-                self.assertTrue(bcrypt.check_password_hash(current_user.password, "admino" ))
-                self.assertFalse(bcrypt.check_password_hash(current_user.password, "incorrect" ))
+                self.assertTrue(bcrypt.checkpw(b"admino", current_user.password ))
+                self.assertFalse(bcrypt.checkpw(b"incorrect", current_user.password))
                 self.assertTrue(current_user.is_active())
                 self.assertTrue(current_user.email == "admin@example.com")
 

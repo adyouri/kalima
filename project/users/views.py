@@ -1,19 +1,22 @@
-from . import users_blueprint
+import bcrypt
+
 from flask import (flash, redirect, url_for,
                    render_template, abort,
                    request, g, jsonify, current_app)
+from flask_login import login_user, logout_user, login_required, current_user
+
+from . import users_blueprint
 from project.models import User, BlogPost
 from project.users.forms import LoginForm, RegisterForm, SettingsForm
-from project import bcrypt, LoginManager, db
-from flask_login import login_user, logout_user, login_required, current_user
+from project import  LoginManager, db
 
 def change_user_settings(email, current_password, new_password, private_favorites):
     message = None
     if current_user.email != email:
         current_user.email = email
     if (current_password != "" and\
-            bcrypt.check_password_hash(
-            current_user.password, current_password)):
+            bcrypt.checkpw(
+            current_password.encode('utf-8'), current_user.password)):
         current_user.update_password(new_password)
     elif (current_password == ""):
         message = None
@@ -79,7 +82,8 @@ def login():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User.query.filter_by(name=form.username.data).first()
-            if user and bcrypt.check_password_hash(user.password, form.password.data):
+            if user and bcrypt.checkpw(form.password.data.encode('utf-8'),
+                                       user.password):
                     login_user(user)
                     flash('You were logged in')
                     return redirect(url_for('posts.home'))
@@ -115,7 +119,7 @@ def register():
         password = form.password.data
         if check_and_add_user(name, email, password) == True:
             return redirect(url_for('posts.home'))
-    return render_template("register.html", form = form) 
+    return render_template("register.html", form = form)
 
 
 @users_blueprint.route('/settings', methods=['POST', 'GET'])
@@ -132,7 +136,7 @@ def settings():
         message = change_user_settings(email=email,
                              current_password=current_password,
                              new_password=new_password,
-                             private_favorites=private_favs) 
+                             private_favorites=private_favs)
         if not message:
             return redirect(url_for('users.settings'))
     return render_template('settings.html', form=form, message=message)
@@ -157,7 +161,7 @@ def unfollow(username):
 @users_blueprint.route('/<string:username>/profile')
 def profile(username):
     message = None
-    user = User.query.filter_by(name = username).first() 
+    user = User.query.filter_by(name = username).first()
     posts = BlogPost.query.filter(BlogPost.author_id == user.id).order_by(BlogPost.created_date.desc()).limit(5)
     if not posts.first():
         message = "No Posts Yet"
@@ -168,13 +172,13 @@ def profile(username):
 
 @users_blueprint.route('/<string:username>/followers')
 def followers(username):
-    user = User.query.filter_by(name = username).first() 
+    user = User.query.filter_by(name = username).first()
     followers = {"followers": [user.name for user in user.followers.all()]}
 
     return jsonify(**followers)
 
 @users_blueprint.route('/<string:username>/following')
 def following(username):
-    user = User.query.filter_by(name = username).first() 
+    user = User.query.filter_by(name = username).first()
     following = {"following": [user.name for user in user.following.all()]}
     return jsonify(**following)

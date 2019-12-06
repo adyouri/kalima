@@ -93,11 +93,6 @@ def fav_users_list(id):
     return jsonify(**{"fav_users_list": fav_users_list})
 
 
-
-
-
-
-
 @posts_blueprint.route('/<int:id>/unfav')
 @login_required
 def remove_fav(id):
@@ -239,5 +234,3 @@ def paginate(page = 1):
     pagination = BlogPost.query.paginate(page=page,
                     per_page=current_app.config['PER_PAGE'])
     return render_template('pages.html', pagination=pagination)
-
-

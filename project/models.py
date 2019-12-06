@@ -1,5 +1,6 @@
 from . import db
-from . import bcrypt
+#from . import bcrypt
+import bcrypt
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
@@ -136,11 +137,12 @@ class User(db.Model):
     def __init__(self, name, email, password):
         self.name = name
         self.email = email
-        self.password = bcrypt.generate_password_hash(password.encode('utf-8'))
+        #self.password = bcrypt.generate_password_hash(password.encode('utf-8'))
+        self.update_password(password)
 
     def update_password(self, password):
         """ Because Bcrypt doesn't hash the password when updating (user.password = "new") """
-        self.password = bcrypt.generate_password_hash(password.encode('utf-8'))
+        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     def is_following(self, user):
         return self.following.filter(follows.c.followed_id == user.id).count() > 0
