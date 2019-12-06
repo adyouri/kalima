@@ -75,7 +75,7 @@ def fav_posts(username):
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_active():
+    if current_user.is_active:
         return redirect(url_for("posts.home"))
     error = None
     form = LoginForm(request.form)
@@ -101,7 +101,7 @@ def logout():
 
 @users_blueprint.route('/register', methods=["GET", "POST"])
 def register():
-    if current_user.is_active():
+    if current_user.is_active:
         return redirect(url_for("posts.home"))
     form = RegisterForm()
 

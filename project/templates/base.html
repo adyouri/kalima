@@ -45,7 +45,7 @@
             </li>
           </ul>
             <ul class="nav navbar-nav navbar-right">
-            {% if current_user.is_active() %}
+            {% if current_user.is_active %}
                  <li class="active"><a href="{{ url_for("users.posts_by_author", author=current_user.name) }}">
                     {{ current_user.name }}
                   </a></li>

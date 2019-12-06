@@ -157,7 +157,7 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'/posts/cat/testing', response.data)
                 self.assertIn(b'admin', response.data)
                 self.assertTrue(current_user.name == "admin")
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
 
         def test_post_has_edit_button(self):
             self.client.post(
@@ -193,7 +193,7 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'/posts/tag/testing_tag', response.data)
                 self.assertIn(b'/posts/tag/tagged_as_testing', response.data)
                 self.assertTrue(current_user.name == "admin")
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
                 response2 = self.client.get('/posts/1')
                 self.assertIn(b"This is a description of the admin post", response2.data)
 
@@ -302,7 +302,7 @@ class PostsTestCase(BaseTestCase):
                               response.data)
                 self.assertIn(b'just now', response.data)
                 self.assertTrue(current_user.name == "admin")
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
 
 
         def test_correct_add_comment_to_post(self):
@@ -321,7 +321,7 @@ class PostsTestCase(BaseTestCase):
                 self.assertIn(b'test comment', response.data)
                 self.assertIn(b'admin', response.data)
                 self.assertTrue(current_user.name == "admin")
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
 
         def test_incorrect_add_comment_to_post(self):
 

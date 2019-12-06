@@ -60,7 +60,7 @@ class UsersTestCase(BaseTestCase):
                 user = User.query.filter_by(name="admin").first()
                 self.assertTrue(str(user) == "<name admin >")
                 self.assertTrue(current_user.name == "admin")
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
 
 
 
@@ -79,7 +79,7 @@ class UsersTestCase(BaseTestCase):
                 self.client.get('/users/logout', follow_redirects=True)
                 response = self.client.get('/users/settings', follow_redirects=True)
                 self.assertIn(b'Please login', response.data)
-                self.assertFalse(current_user.is_active())
+                self.assertFalse(current_user.is_active)
 
         def test_login_page_loads(self):
             response = self.client.get('/users/login', content_type='html/text')
@@ -100,7 +100,7 @@ class UsersTestCase(BaseTestCase):
                                         follow_redirects = True)
                 self.assertIn(b'You were logged in', response.data)
                 self.assertTrue(current_user.name == "test_user")
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
 
         def test_username_is_already_taken(self):
             with self.client:
@@ -112,7 +112,7 @@ class UsersTestCase(BaseTestCase):
                                             confirm="testpassword"),
                                         follow_redirects = True)
                 self.assertIn(b'Username Already Taken', response.data)
-                self.assertFalse(current_user.is_active())
+                self.assertFalse(current_user.is_active)
 
         def test_email_is_already_registered(self):
             with self.client:
@@ -124,7 +124,7 @@ class UsersTestCase(BaseTestCase):
                                             confirm="testpassword"),
                                         follow_redirects = True)
                 self.assertIn(b'Email Already Registered', response.data)
-                self.assertFalse(current_user.is_active())
+                self.assertFalse(current_user.is_active)
 
         def test_email_username_already_registered(self):
             with self.client:
@@ -136,7 +136,7 @@ class UsersTestCase(BaseTestCase):
                                             confirm="testpassword"),
                                         follow_redirects = True)
                 self.assertIn(b'Email and Username already registered', response.data)
-                self.assertFalse(current_user.is_active())
+                self.assertFalse(current_user.is_active)
 
         def test_incorrect_registration(self):
             with self.client:
@@ -167,7 +167,7 @@ class UsersTestCase(BaseTestCase):
                                         '/users/login',
                                         follow_redirects = True)
 
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
                 self.assertIn(b'Testing Post', response.data)
 
 
@@ -182,7 +182,7 @@ class UsersTestCase(BaseTestCase):
                                         '/users/register',
                                         follow_redirects = True)
 
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
                 self.assertIn(b'Testing Post', response.data)
 
         def test_correct_settings(self):
@@ -205,7 +205,7 @@ class UsersTestCase(BaseTestCase):
                 self.assertIn(b'You have successfully changed your settings', response.data)
                 self.assertTrue(bcrypt.checkpw(b"admino", current_user.password ))
                 self.assertFalse(bcrypt.checkpw(b"incorrect", current_user.password))
-                self.assertTrue(current_user.is_active())
+                self.assertTrue(current_user.is_active)
                 self.assertTrue(current_user.email == "admin@example.com")
 
         def test_follow(self):
