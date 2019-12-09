@@ -1,5 +1,4 @@
 # Upgrade:
-Flask-Testing
 Flask-WTF
 Flask-Migrate
 
