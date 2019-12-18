@@ -1,19 +1,19 @@
-from flask_wtf import Form
-from wtforms import TextField, TextAreaField
+from flask_wtf import FlaskForm
+from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 
-class PostForm(Form):
-    title = TextField('title', validators = [DataRequired(), Length(max=100)])
+class PostForm(FlaskForm):
+    title = StringField('title', validators = [DataRequired(), Length(max=100)])
     description = TextAreaField('description', validators = [DataRequired()])
-    category = TextField('category', validators = [DataRequired()])
-    tags = TextField('tags', validators = [DataRequired()])
+    category = StringField('category', validators = [DataRequired()])
+    tags = StringField('tags', validators = [DataRequired()])
 
-class EditPostForm(Form):
-    title = TextField('title', validators = [DataRequired(), Length(max=100)])
+class EditPostForm(FlaskForm):
+    title = StringField('title', validators = [DataRequired(), Length(max=100)])
     description = TextAreaField('description', validators = [DataRequired()])
-    category = TextField('category', validators = [DataRequired()])
-    tags = TextField('tags', validators = [DataRequired()])
+    category = StringField('category', validators = [DataRequired()])
+    tags = StringField('tags', validators = [DataRequired()])
 
-class CommentForm(Form):
+class CommentForm(FlaskForm):
     content = TextAreaField('content', validators = [DataRequired(), Length(max=10000)])

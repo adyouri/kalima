@@ -1,6 +1,3 @@
-# Upgrade:
-Flask-WTF
-Flask-Migrate
 
 # Code coverage
 

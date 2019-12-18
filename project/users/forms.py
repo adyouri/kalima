@@ -1,22 +1,21 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 
-from wtforms import TextField, PasswordField, BooleanField
+from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 
-class LoginForm(Form):
-    username = TextField('Username', validators=[DataRequired()])
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
 
-class SettingsForm(Form):
+class SettingsForm(FlaskForm):
 
-    email = TextField('Email', validators=[
+    email = StringField('Email', validators=[
        Email(message="Must Provide An Actual Email :)"),
            Length(min=6, max=40)]
        )
 
     current_password = PasswordField('Current password')
-    
     new_password = PasswordField('New password', validators=[
         #Length(min=6, max=25)
         ]
@@ -29,13 +28,13 @@ class SettingsForm(Form):
     private_favs = BooleanField('Make my favorites private')
 
 
-class RegisterForm(Form):
-    username = TextField('Username', 
+class RegisterForm(FlaskForm):
+    username = StringField('Username', 
             validators=[DataRequired(),
                 Length(min=3, max=25)]
             )
 
-    email = TextField('Email', validators=[
+    email = StringField('Email', validators=[
         DataRequired(),
         Email(message="Must Provide An Actual Email :)"),
             Length(min=6, max=40)]
